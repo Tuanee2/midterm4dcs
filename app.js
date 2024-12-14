@@ -14,13 +14,18 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Cấu hình file tĩnh
-app.use('/css', express.static(path.join(__dirname, 'public/css')));
+//app.use('/css', express.static(path.join(__dirname, 'public/css')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Route chính
 app.get('/', homeController.getHomePage);
 
 // Route thêm người dùng
 app.post('/add-user', homeController.addUser);
+
+app.get('/mainpage', (req, res) => {
+    res.render('mainpage'); // Kết xuất file mainpage.ejs
+});
 
 // Route lỗi (404)
 app.use((req, res) => {

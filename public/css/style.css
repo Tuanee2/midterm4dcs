@@ -1,0 +1,13 @@
+header {
+    text-align: center; /* Căn giữa toàn bộ nội dung trong header */
+}
+
+header img {
+    margin-top: 5px; /* Thêm khoảng cách giữa tiêu đề và hình ảnh */
+    width: 80px;
+    height: auto;
+}
+
+main {
+    text-align: center; /* Căn giữa toàn bộ nội dung trong main */
+}
