@@ -1,151 +1,64 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sidebar đóng/mở</title>
-    <style>
-        /* CSS cơ bản cho body */
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            display: flex;
-        }
-
-        /* Sidebar */
-        .sidebar {
-            width: 250px;
-            background-color: #333;
-            color: white;
-            height: 100vh;
-            position: fixed;
-            top: 0;
-            left: 0;
-            padding: 20px;
-            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
-            overflow-y: auto;
-            transition: transform 0.3s ease; /* Hiệu ứng đóng/mở */
-        }
-
-        .sidebar.closed {
-            transform: translateX(-100%); /* Đẩy sidebar ra ngoài màn hình */
-        }
-
-        .sidebar h2 {
-            text-align: center;
-            margin-top: 0;
-        }
-
-        .sidebar ul {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        .sidebar ul li {
-            padding: 10px;
-            margin: 5px 0;
-            background: #444;
-            border-radius: 5px;
-        }
-
-        .sidebar ul li a {
-            text-decoration: none;
-            color: white;
-            display: block;
-        }
-
-        .sidebar ul li:hover {
-            background: #555;
-        }
-
-        /* Nội dung chính */
-        .main-content {
-            margin-left: 250px;
-            padding: 20px;
-            flex: 1;
-            transition: margin-left 0.3s ease; /* Hiệu ứng đẩy nội dung khi đóng/mở sidebar */
-        }
-
-        .main-content.sidebar-closed {
-            margin-left: 0; /* Nội dung trở về toàn màn hình khi sidebar đóng */
-        }
-
-        /* Nút đóng/mở sidebar */
-        .toggle-btn {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background-color: #333;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-
-        .toggle-btn:hover {
-            background-color: #555;
-        }
-    </style>
+    <title>Main Page</title>
+    <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
-    <!-- Sidebar -->
-    <div class="sidebar" id="sidebar">
-        <h2>Menu</h2>
-        <ul>
-            <li><a href="#">Auto</a></li>
-            <li><a href="#">Manual</a></li>
-            <li><a href="#">Liên hệ</a></li>
-            <li><a href="#">Hỗ trợ</a></li>
-            <li><a href="#">Quay lại</a></li>
+    <div class="sidebar" >
+        <button class="sidebar-btn">Auto</button>
+        <button class="sidebar-btn">Manual</button>
+        <button class="sidebar-btn">Trend</button>
+        <button class="sidebar-btn">Set weight</button>
+        <button class="sidebar-btn">Recipe</button>
+        <button class="sidebar-btn">Start</button>
+        <button class="sidebar-btn">Reset</button>
+        <button class="sidebar-btn">Estop</button>
+        <button onclick="location.href='/';" class="sidebar-btn">Back</button>
+    </div>
+
+    <div class= "manual-control">
+        <button class="manual-btn">Button 1</button>
+        <button class="manual-btn">Button 2</button>
+        <button class="manual-btn">Button 3</button>
+        <button class="manual-btn">Button 4</button>
+        <button class="manual-btn">Button 5</button>
+        <button class="manual-btn">Button 6</button>
+        <button class="manual-btn">Button 7</button>
+        <button class="manual-btn">Button 8</button>
+        <button class="manual-btn">Button 9</button>
+        <button class="manual-btn">Button 10</button>
+        <button class="manual-btn">Button 11</button>
+        <button class="manual-btn">Button 12</button>
+        <button class="manual-btn">Button 13</button>
+        <button class="manual-btn">Button 14</button>
+        <button class="manual-btn">Button 15</button>
+        <button class="manual-btn">Button 16</button>
+    </div>
+
+    <div class="recipe-show"> 
+
+    </div>
+
+    <div class="main-screen" >
+        
+    </div>
+
+    <div class="log-window">
+        <ul id="log-list">
+            <!-- Các log sẽ được thêm vào đây -->
+            <li>Log thử nghiệm: Cửa sổ log hoạt động!</li>
         </ul>
     </div>
 
-    <!-- Nút đóng/mở sidebar -->
-    <button class="toggle-btn" id="toggle-btn">☰</button>
-
-    <!-- Nội dung chính -->
-    <div class="main-content" id="main-content">
-        <header>
-            <h1>Chào mừng bạn đến trang tiếp theo</h1>
-        </header>
-        <main>
-            <div style="display: flex; justify-content: start; gap: 10px; margin-left: 0px; margin-top: 10px;">
-                <div style="display: flex; flex-direction: column; justify-content: start; gap: 5px; margin-left: 400px; margin-top: 50px;">
-                    <img src="/images/motor.png" alt="Hình ảnh 1" style="width: 100%; max-width: 40px;">
-                    <img src="/images/motor.png" alt="Hình ảnh 2" style="width: 100%; max-width: 40px;">
-                </div>
-
-                <div style="display: flex; flex-direction: column; justify-content: start; gap: 5px; margin-left: 600px; margin-top: 50px;">
-                    <img src="/images/motor.png" alt="Hình ảnh 1" style="width: 100%; max-width: 40px; transform: rotate(180deg);">
-                    <img src="/images/motor.png" alt="Hình ảnh 2" style="width: 100%; max-width: 40px; transform: rotate(180deg);">
-                </div>
-            </div>
-            <div style="display: flex; justify-content: start; gap: 10px; margin-left: 500px; margin-top: 10px;">
-                <img src="/images/hopper.png" alt="Hình ảnh 1" style="width: 100%; max-width: 40px;">
-                <img src="/images/hopper.png" alt="Hình ảnh 2" style="width: 100%; max-width: 40px;">
-                <img src="/images/hopper.png" alt="Hình ảnh 2" style="width: 100%; max-width: 40px;">
-            </div>
-
-            <div style="display: flex; justify-content: start; gap: 10px; margin-left: 700px; margin-top: 0px;">
-                <img src="/images/hopper.png" alt="Hình ảnh 1" style="width: 100%; max-width: 80px;">
-                <img src="/images/hopper.png" alt="Hình ảnh 2" style="width: 100%; max-width: 80px;">
-            </div>
-        </main>
-    </div>
-
     <script>
-        // JavaScript để xử lý đóng/mở sidebar
         const sidebar = document.getElementById('sidebar');
         const mainContent = document.getElementById('main-content');
         const toggleBtn = document.getElementById('toggle-btn');
 
-        toggleBtn.addEventListener('click', () => {
-            sidebar.classList.toggle('closed'); // Thêm hoặc xóa class 'closed'
-            mainContent.classList.toggle('sidebar-closed'); // Thêm hoặc xóa class 'sidebar-closed'
-        });
+        
     </script>
-
-    
 </body>
 </html>

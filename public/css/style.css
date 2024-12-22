@@ -11,3 +11,137 @@ header img {
 main {
     text-align: center; /* Căn giữa toàn bộ nội dung trong main */
 }
+
+.main-image{
+    position:relative;
+    width: 100%;
+    height: 100%;
+}
+
+.sidebar{
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    width: 50px;
+    height: 500px;
+    background-color: #f7f8f3; /* Màu nền */
+    border-radius: 10px; /* Bo góc */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.4); /* Đổ bóng */
+    padding: 5px; /* Khoảng cách bên trong */
+    z-index: 1000; /* Đảm bảo hiển thị trên cùng */
+}
+
+.sidebar-btn {
+    display: block; /* Hiển thị dạng khối để các nút xếp chồng */
+    width: 100%; /* Chiều rộng chiếm toàn bộ sidebar */
+    height: 45px; /* Chiều cao nút */
+    padding: 5px 0; /* Khoảng cách bên trong nút */
+    margin: 10px 0; /* Khoảng cách giữa các nút */
+    background-color: #78bcc4; /* Màu nền */
+    border: none; /* Xóa viền mặc định */
+    border-radius: 5px; /* Bo góc nút */
+    text-align: center; /* Căn giữa chữ */
+    font-size: 14px; /* Kích thước chữ */
+    cursor: pointer; /* Thay đổi con trỏ chuột */
+    transition: background-color 0.3s ease; /* Hiệu ứng khi hover */
+}
+
+.sidebar-btn:hover {
+    background-color: #dcdcdc; /* Màu nền khi hover */
+}
+
+.recipe-show {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 40vw;
+    height: 20vh;
+    background-color: #f7f8f3; /* Màu nền */
+    border-radius: 10px; /* Bo góc */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.4); /* Đổ bóng */
+    padding: 10px; /* Khoảng cách bên trong */
+    z-index: 1000; /* Đảm bảo hiển thị trên cùng */
+}
+
+.manual-control {
+    position: fixed;
+    top: 20px;
+    left: 100px;
+    width: 24vw; /* Chiều rộng của container */
+    height: 68vh;
+    background-color: #f7f8f3; /* Màu nền */
+    border-radius: 10px; /* Bo góc */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.4); /* Đổ bóng */
+    padding: 10px; /* Khoảng cách bên trong */
+    z-index: 1000; /* Đảm bảo hiển thị trên cùng */
+    display: grid; /* Sử dụng Grid layout */
+    grid-template-columns: 1fr 1fr; /* 2 cột có kích thước bằng nhau */
+    gap: 10px; /* Khoảng cách giữa các nút */
+}
+
+.manual-btn {
+    width: 100%; /* Chiều rộng nút tự động điều chỉnh */
+    height: 50px; /* Chiều cao nút */
+    background-color: #78bcc4; /* Màu nền */
+    border: none; /* Xóa viền mặc định */
+    border-radius: 5px; /* Bo góc nút */
+    text-align: center; /* Căn giữa chữ */
+    font-size: 14px; /* Kích thước chữ */
+    cursor: pointer; /* Con trỏ chuột khi hover */
+    transition: background-color 0.3s ease; /* Hiệu ứng khi hover */
+}
+
+.manual-btn:hover {
+    background-color: #dcdcdc; /* Màu nền khi hover */
+}
+
+.time-show {
+    position: fixed;
+    bottom: 20px;
+    right: 10px;
+    width: 10vw;
+    height: 10vh;
+    background-color: #f7f8f3; /* Màu nền */
+    border-radius: 10px; /* Bo góc */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.4); /* Đổ bóng */
+    padding: 10px; /* Khoảng cách bên trong */
+    z-index: 1000; /* Đảm bảo hiển thị trên cùng */
+}
+
+.main-screen {
+    position: fixed;
+    top: 20px;
+    left: 34vw;
+    right: 20px;
+    height: 68vh;
+    background-color: #f7f8f3; /* Màu nền */
+    border-radius: 10px; /* Bo góc */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.4); /* Đổ bóng */
+    padding: 10px; /* Khoảng cách bên trong */
+    z-index: 1000; /* Đảm bảo hiển thị trên cùng */
+}
+
+.log-window {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    width: 24vw ;
+    height: 20vh;
+    background-color: #f7f8f3; /* Màu nền */
+    border-radius: 10px; /* Bo góc */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.4); /* Đổ bóng */
+    overflow-y: auto; /* Cuộn dọc nếu log dài */
+    padding: 10px; /* Khoảng cách bên trong */
+    font-size: 14px; /* Kích thước chữ */
+    z-index: 1000; /* Đảm bảo hiển thị trên cùng */
+}
+
+.log-window ul {
+    list-style: none; /* Bỏ dấu đầu dòng */
+    padding: 0;
+    margin: 0;
+}
+
+.log-window ul li {
+    margin-bottom: 5px; /* Khoảng cách giữa các dòng log */
+}
