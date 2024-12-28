@@ -26,5 +26,20 @@ module.exports = {
                 res.redirect('/');
             }
         });
+    },
+
+    // ghi log xuống database
+    addLog: (req, res) => {
+        const { date, message_text } = req.body; // Lấy dữ liệu từ request body
+        const sql = 'INSERT INTO Log (date, time, message_text) VALUES (?, TIME("now"), ?)';
+        
+        db.run(sql, [date, message_text], (err) => {
+            if (err) {
+                console.error(err.message);
+                res.render('error', { message: 'Không thể thêm log!' }); // Hiển thị lỗi nếu có
+            } else {
+                res.redirect('/'); // Chuyển hướng sau khi thêm thành công
+            }
+        });
     }
 };

@@ -61,7 +61,9 @@
 
         function getCurrentTime() {
             const now = new Date();
-            return now.toLocaleTimeString(); // Trả về chuỗi định dạng giờ:phút:giây
+            const date = now.toLocaleDateString(); // Lấy ngày (định dạng: dd/mm/yyyy hoặc mm/dd/yyyy)
+            const time = now.toLocaleTimeString(); // Lấy giờ (định dạng: hh:mm:ss)
+            return `${date} ${time}`; // Kết hợp ngày và giờ
         }
 
         // Hàm để ghi log vào danh sách

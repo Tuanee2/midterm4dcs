@@ -22,6 +22,7 @@ app.get('/', homeController.getHomePage);
 
 // Route thêm người dùng
 app.post('/add-user', homeController.addUser);
+app.post('/log', homeController.addUser)
 
 app.get('/mainpage', (req, res) => {
     res.render('mainpage'); // Kết xuất file mainpage.ejs
