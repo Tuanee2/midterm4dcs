@@ -20,7 +20,7 @@
     </div>
 
     <div class= "manual-control">
-        <button class="manual-btn">Button 1</button>
+        <button class="manual-btn">vít xi măng</button>
         <button class="manual-btn">Button 2</button>
         <button class="manual-btn">Button 3</button>
         <button class="manual-btn">Button 4</button>
@@ -49,7 +49,7 @@
     <div class="log-window">
         <ul id="log-list">
             <!-- Các log sẽ được thêm vào đây -->
-            <li>Log thử nghiệm: Cửa sổ log hoạt động!</li>
+            <!--<li>Log thử nghiệm: Cửa sổ log hoạt động!</li>-->
         </ul>
     </div>
 
@@ -57,6 +57,45 @@
         const sidebar = document.getElementById('sidebar');
         const mainContent = document.getElementById('main-content');
         const toggleBtn = document.getElementById('toggle-btn');
+        const MAX_LOGS = 6; // Số lượng log tối đa trong danh sách
+
+        function getCurrentTime() {
+            const now = new Date();
+            return now.toLocaleTimeString(); // Trả về chuỗi định dạng giờ:phút:giây
+        }
+
+        // Hàm để ghi log vào danh sách
+        function logAction(action) {
+            const logList = document.getElementById('log-list');
+            const currentTime = getCurrentTime();
+            const logItem = document.createElement('li');
+            logItem.textContent = `[${currentTime}] ${action}`;
+            logList.appendChild(logItem);
+
+            // Cuộn xuống cuối log
+            logList.scrollTop = logList.scrollHeight;
+        }
+
+        // Gắn sự kiện click cho nút Auto và Manual
+        document.querySelector('.sidebar-btn:nth-child(1)').onclick = () => {
+            logAction('Auto mode activated');
+        };
+
+        document.querySelector('.sidebar-btn:nth-child(2)').onclick = () => {
+            logAction('Manual mode activated');
+        };
+
+        document.querySelector('.sidebar-btn:nth-child(6)').onclick = () => {
+            logAction('System started');
+        };
+
+        document.querySelector('.sidebar-btn:nth-child(7)').onclick = () => {
+            logAction('System reset');
+        };
+
+        document.querySelector('.sidebar-btn:nth-child(8)').onclick = () => {
+            logAction('Emergency stop activated');
+        };
 
         
     </script>
