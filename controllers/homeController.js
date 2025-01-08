@@ -47,7 +47,7 @@ module.exports = {
     addRecipe: (req, res) => {
         const {
             name, cement, sand, mineral, flyash,
-            additive1, additive2, additive3
+            additive1, additive2, additive3, total_weight, batch_number
         } = req.body;
     
         // Kiểm tra dữ liệu đầu vào
@@ -59,13 +59,13 @@ module.exports = {
         const sql = `
             INSERT INTO recipe (
                 name, cement, sand, mineral, flyash,
-                additive1, additive2, additive3
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                additive1, additive2, additive3, total_weight, batch_number
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
     
         db.run(
             sql,
-            [name, cement || 0, sand || 0, mineral || 0, flyash || 0, additive1 || 0, additive2 || 0, additive3 || 0],
+            [name, cement || 0, sand || 0, mineral || 0, flyash || 0, additive1 || 0, additive2 || 0, additive3 || 0, total_weight || 0, batch_number || 0],
             function (err) {
                 if (err) {
                     console.error(err.message);
@@ -80,7 +80,7 @@ module.exports = {
     saveRecipe: (req, res) => {
         const {
             name, cement, sand, mineral, flyash,
-            additive1, additive2, additive3
+            additive1, additive2, additive3, total_weight, batch_number
         } = req.body;
     
         // Kiểm tra dữ liệu đầu vào
@@ -92,13 +92,13 @@ module.exports = {
         const sql = `
             INSERT INTO recipe (
                 name, cement, sand, mineral, flyash,
-                additive1, additive2, additive3
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                additive1, additive2, additive3, total_weight, batch_number
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
     
         db.run(
             sql,
-            [name, cement || 0, sand || 0, mineral || 0, flyash || 0, additive1 || 0, additive2 || 0, additive3 || 0],
+            [name, cement || 0, sand || 0, mineral || 0, flyash || 0, additive1 || 0, additive2 || 0, additive3 || 0, total_weight || 0, batch_number || 0],
             function (err) {
                 if (err) {
                     console.error(err.message);
@@ -144,5 +144,49 @@ module.exports = {
                 res.status(200).json({ message: 'Xóa công thức thành công!' });
             }
         });
+    },
+
+    updateRecipe: (req, res) => {
+        const {
+            id, name, cement, sand, mineral, flyash,
+            additive1, additive2, additive3, total_weight, batch_number
+        } = req.body;
+    
+        // Kiểm tra dữ liệu đầu vào
+        if (!id || isNaN(id)) {
+            res.status(400).json({ error: 'ID không hợp lệ!' });
+            return;
+        }
+        if (!name || name.trim() === "") {
+            res.status(400).json({ error: 'Tên công thức không được để trống!' });
+            return;
+        }
+        const numericFields = [cement, sand, mineral, flyash, additive1, additive2, additive3];
+        if (numericFields.some(field => field < 0 || isNaN(field))) {
+            res.status(400).json({ error: 'Các giá trị phải là số không âm!' });
+            return;
+        }
+    
+        const sql = `
+            UPDATE recipe
+            SET name = ?, cement = ?, sand = ?, mineral = ?, flyash = ?,
+                additive1 = ?, additive2 = ?, additive3 = ?, total_weight = ?, batch_number = ?
+            WHERE id = ?
+        `;
+    
+        db.run(
+            sql,
+            [name, cement || 0, sand || 0, mineral || 0, flyash || 0, additive1 || 0, additive2 || 0, additive3 || 0, total_weight || 0, batch_number || 0, id],
+            function (err) {
+                if (err) {
+                    console.error('Lỗi SQL:', err.message);
+                    res.status(500).json({ error: 'Không thể cập nhật công thức!' });
+                } else if (this.changes === 0) {
+                    res.status(404).json({ error: 'Công thức không tồn tại hoặc không có thay đổi!' });
+                } else {
+                    res.status(200).json({ message: 'Cập nhật công thức thành công!' });
+                }
+            }
+        );
     }
 };

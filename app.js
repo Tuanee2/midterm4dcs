@@ -28,6 +28,7 @@ app.post('/addrecipe', homeController.addRecipe);
 app.post('/saverecipe', homeController.saveRecipe);
 app.post('/readrecipelist', homeController.readRecipeList);
 app.post('/deleterecipe', homeController.deleteRecipe);
+app.post('/updaterecipe', homeController.updateRecipe);
 
 app.get('/mainpage', (req, res) => {
     res.render('mainpage'); // Kết xuất file mainpage.ejs

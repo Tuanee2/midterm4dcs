@@ -280,8 +280,13 @@
                     const content1 = document.getElementById("content-1");
                     content1.innerHTML = `
                         <div class="recipe-form">
-                            <h3>Chỉnh sửa công thức: ${recipe.name}</h3>
                             <form id="editRecipeForm">
+                                <label for="batch_number">Num of batch:</label>
+                                <input type="number" id="batch_number" value="${recipe.batch_number}" min="0" required>
+
+                                <label for="total_weight">Total weight:</label>
+                                <input type="number" id="total_weight" value="${recipe.total_weight}" min="0" required>
+
                                 <label for="cement">Xi măng (%):</label>
                                 <input type="number" id="cement" value="${recipe.cement}" min="0" max="100" required>
                                 
@@ -303,7 +308,8 @@
                                 <label for="additive3">Phụ gia 3 (kg):</label>
                                 <input type="number" id="additive3" value="${recipe.additive3}" min="0" required>
                                 
-                                <button type="button" onclick="saveRecipe(${recipe.id})">Lưu</button>
+                                <button type="button" onclick="saveRecipe(${recipe.id})">update</button>
+                                <button type="button" onclick="deleteRecipe(${recipe.id})">delete</button>
                             </form>
                         </div>
                     `;
@@ -319,6 +325,14 @@
                     <div class="input-group">
                         <label for="recipe-name">Tên công thức:</label>
                         <input type="text" id="recipe-name" placeholder="Nhập tên công thức" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="batch_number">Num of batch:</label>
+                        <input type="number" id="batch_number" placeholder="Enter num of batch" min="0" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="total_weight">Total weight:</label>
+                        <input type="number" id="total_weight" placeholder="Enter the total weight" min="0" required>
                     </div>
                     <div class="input-group">
                         <label for="cement">Xi măng (%):</label>
@@ -362,8 +376,10 @@
             const additive1 = document.getElementById('additive1').value;
             const additive2 = document.getElementById('additive2').value;
             const additive3 = document.getElementById('additive3').value;
+            const batch_number = document.getElementById('batch_number').value;
+            const total_weight = document.getElementById('total_weight').value;
 
-            const recipe = { name, cement, sand, mineral, flyash, additive1, additive2, additive3 };
+            const recipe = { name, cement, sand, mineral, flyash, additive1, additive2, additive3 , total_weight, batch_number};
             logMessage("save successful.");
             console.log("Dữ liệu gửi lên server:", recipe);
             fetch('/addrecipe', {
@@ -377,6 +393,33 @@
                     showRecipeList(); // Hiển thị lại danh sách công thức
                 })
                 .catch(err => console.error('Lỗi khi thêm công thức:', err));
+        }
+
+        function deleteRecipe() {
+            const recipeId = document.getElementById('recipe-id').value;
+
+            // Kiểm tra nếu ID rỗng hoặc không hợp lệ
+            if (!recipeId || isNaN(recipeId)) {
+                alert('ID không hợp lệ! Vui lòng kiểm tra lại.');
+                return;
+            }
+
+            fetch('/deleteRecipe', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: recipeId }),
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Lỗi trong quá trình xóa công thức.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    alert(data.message);
+                    showRecipeList(); // Hiển thị lại danh sách công thức
+                })
+                .catch(err => console.error('Lỗi khi xóa công thức:', err));
         }
 
         function start() {
