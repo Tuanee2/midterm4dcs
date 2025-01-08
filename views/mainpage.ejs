@@ -5,59 +5,383 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Main Page</title>
     <link rel="stylesheet" href="./css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <div class="sidebar" >
-        <button class="sidebar-btn">Auto</button>
-        <button class="sidebar-btn">Manual</button>
-        <button class="sidebar-btn">Trend</button>
-        <button class="sidebar-btn">Set weight</button>
-        <button class="sidebar-btn">Recipe</button>
-        <button class="sidebar-btn">Start</button>
-        <button class="sidebar-btn">Reset</button>
-        <button class="sidebar-btn">Estop</button>
-        <button onclick="location.href='/';" class="sidebar-btn">Back</button>
-    </div>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <button class="sidebar-btn" onclick="automode()">Auto</button>
+            <button class="sidebar-btn" onclick="showManual()">Manual</button>
+            <button class="sidebar-btn" onclick="showTrend()">Trend</button>
+            <button class="sidebar-btn">Set weight</button>
+            <button class="sidebar-btn" onclick="showRecipeList()">Recipe</button>
+            <button class="sidebar-btn" onclick="start()">Start</button>
+            <button class="sidebar-btn">Reset</button>
+            <button class="sidebar-btn">Estop</button>
+            <button onclick="location.href='/';" class="sidebar-btn">Back</button>
+        </div> 
 
-    <div class= "manual-control">
-        <button class="manual-btn">vít xi măng</button>
-        <button class="manual-btn">Button 2</button>
-        <button class="manual-btn">Button 3</button>
-        <button class="manual-btn">Button 4</button>
-        <button class="manual-btn">Button 5</button>
-        <button class="manual-btn">Button 6</button>
-        <button class="manual-btn">Button 7</button>
-        <button class="manual-btn">Button 8</button>
-        <button class="manual-btn">Button 9</button>
-        <button class="manual-btn">Button 10</button>
-        <button class="manual-btn">Button 11</button>
-        <button class="manual-btn">Button 12</button>
-        <button class="manual-btn">Button 13</button>
-        <button class="manual-btn">Button 14</button>
-        <button class="manual-btn">Button 15</button>
-        <button class="manual-btn">Button 16</button>
-    </div>
+        <!-- Content Area 1 -->
+        <div id="content-1" class="content-area content-1">
+            <div class="trend-charts">
+                <canvas id="trendChart1" width="300" height="150"></canvas>
+                <canvas id="trendChart2" width="300" height="150"></canvas>
+            </div>
+        </div>
 
-    <div class="recipe-show"> 
+        <!-- Main Area -->
+        <div class="main-area">
+            <img src="/images/all.png" alt="Sample Image" class="main-image">
+        </div>
 
-    </div>
-
-    <div class="main-screen" >
-        
-    </div>
-
-    <div class="log-window">
-        <ul id="log-list">
-            <!-- Các log sẽ được thêm vào đây -->
-            <!--<li>Log thử nghiệm: Cửa sổ log hoạt động!</li>-->
-        </ul>
+        <!-- Content Areas below -->
+        <div class="content-area content-2">
+            <div id="log-container" class="log-container"></div>
+        </div>
+        <div class="content-area content-3">
+            <h3>Content Area 3</h3>
+        </div>
+        <div class="content-area content-4">
+            <div id="content-4" class="content-area content-4">
+                <div class="recipe-container">
+                    <!-- Cột Công thức hiện tại -->
+                    <div class="recipe-column">
+                        <div class="recipe-header">
+                            <h4>CÔNG THỨC HIỆN TẠI:</h4>
+                            <span id="current-recipe-id">0</span>
+                        </div>
+                        <table>
+                            <tr><td>Xi măng</td><td id="current-cement">0.000</td></tr>
+                            <tr><td>Cát</td><td id="current-sand">0.000</td></tr>
+                            <tr><td>Khoáng</td><td id="current-mineral">0.000</td></tr>
+                            <tr><td>Tro bay</td><td id="current-flyash">0.000</td></tr>
+                            <tr><td>Phụ gia 1</td><td id="current-additive1">0.000</td></tr>
+                            <tr><td>Phụ gia 2</td><td id="current-additive2">0.000</td></tr>
+                            <tr><td>Phụ gia 3</td><td id="current-additive3">0.000</td></tr>
+                        </table>
+                    </div>
+            
+                    <!-- Cột Giá trị thực tế -->
+                    <div class="recipe-column">
+                        <div class="recipe-header">
+                            <h4>GIÁ TRỊ THỰC TẾ:</h4>
+                        </div>
+                        <table>
+                            <tr><td>Xi măng</td><td id="actual-cement">0.000</td></tr>
+                            <tr><td>Cát</td><td id="actual-sand">0.000</td></tr>
+                            <tr><td>Khoáng</td><td id="actual-mineral">0.000</td></tr>
+                            <tr><td>Tro bay</td><td id="actual-flyash">0.000</td></tr>
+                            <tr><td>Phụ gia 1</td><td id="actual-additive1">0.000</td></tr>
+                            <tr><td>Phụ gia 2</td><td id="actual-additive2">0.000</td></tr>
+                            <tr><td>Phụ gia 3</td><td id="actual-additive3">0.000</td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
-        const sidebar = document.getElementById('sidebar');
-        const mainContent = document.getElementById('main-content');
-        const toggleBtn = document.getElementById('toggle-btn');
-        const MAX_LOGS = 6; // Số lượng log tối đa trong danh sách
+        function automode() {
+            // Thực hiện các thao tác khi chế độ tự động được chọn
+            logMessage("Auto mode selected.");
+
+        }
+
+        function showTrend() {
+            const content1 = document.getElementById("content-1");
+            content1.innerHTML = `
+                <div class="trend-charts">
+                    <canvas id="trendChart1" width="400" height="200"></canvas>
+                    <canvas id="trendChart2" width="400" height="200"></canvas>
+                </div>
+            `;
+
+            // Biểu đồ 1: Hiệu suất
+            const ctx1 = document.getElementById('trendChart1').getContext('2d');
+            new Chart(ctx1, {
+                type: 'line',
+                data: {
+                    labels: ['10:00', '10:05', '10:10', '10:15', '10:20', '10:25'],
+                    datasets: [{
+                        label: 'Cement Screw Speed (rpm)',
+                        data: [100, 105, 98, 110, 115, 120],
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: true, position: 'top' }
+                    },
+                    scales: {
+                        x: { beginAtZero: true },
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+
+            // Biểu đồ 2: Lượng nguyên liệu
+            const ctx2 = document.getElementById('trendChart2').getContext('2d');
+            new Chart(ctx2, {
+                type: 'line',
+                data: {
+                    labels: ['10:00', '10:05', '10:10', '10:15', '10:20', '10:25'],
+                    datasets: [{
+                        label: 'Cement (kg)',
+                        data: [500, 520, 510, 530, 540, 550],
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Sand (kg)',
+                        data: [300, 310, 320, 300, 290, 280],
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: true, position: 'top' }
+                    },
+                    scales: {
+                        x: { beginAtZero: true },
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+        }
+
+        function showManual() {
+            logMessage("Manual mode selected.");
+            const content1 = document.getElementById("content-1");
+            const buttonTasks = [
+                "Cement Screw", "Fly Ash Screw", "Sand Screw", "Mineral Screw",
+                "Mixer", "Conveyor Chute", "Hopper Valve PG 1", "Hopper Valve PG 2",
+                "Hopper Valve PG 3", "PG Scale Valve", "Sand Scale Valve", "Mineral Ash Valve",
+                "Mixer Valve Open", "Mixer Valve Close", "Sand Valve Vibrator", "PG Ash Valve Vibrator"
+            ];
+
+            content1.innerHTML = `
+        
+                <div class="manual-grid">
+                    ${buttonTasks.map((task, index) => 
+                        `<button class="manual-btn" onclick="handleButtonClick(${index + 1})">${task}</button>`
+                    ).join("")}
+                </div>
+            `;
+        }
+
+        function handleButtonClick(buttonIndex) {
+            switch (buttonIndex) {
+                case 1:
+                    logMessage("Cement Screw started.");
+                    break;
+                case 2:
+                    logMessage("Turn Off action triggered!");
+                    break;
+                case 3:
+                    logMessage("Increase Speed action triggered!");
+                    break;
+                case 4:
+                    logMessage("Decrease Speed action triggered!");
+                    break;
+                case 5:
+                    logMessage("Open Valve action triggered!");
+                    break;
+                case 6:
+                    logMessage("Close Valve action triggered!");
+                    break;
+                case 7:
+                    logMessage("Start Pump action triggered!");
+                    break;
+                case 8:
+                    logMessage("Stop Pump action triggered!");
+                    break;
+                case 9:
+                    logMessage("Enable Alarm action triggered!");
+                    break;
+                case 10:
+                    logMessage("Disable Alarm action triggered!");
+                    break;
+                case 11:
+                    logMessage("Check Status action triggered!");
+                    break;
+                case 12:
+                    logMessage("Reset System action triggered!");
+                    break;
+                case 13:
+                    logMessage("Run Diagnostic action triggered!");
+                    break;
+                case 14:
+                    logMessage("Stop Diagnostic action triggered!");
+                    break;
+                case 15:
+                    logMessage("Power Up action triggered!");
+                    break;
+                case 16:
+                    logMessage("Power Down action triggered!");
+                    break;
+                default:
+                    alert("Unknown action!");
+            }
+        }
+
+        function showRecipeList() {
+            const content1 = document.getElementById("content-1");
+
+            // Gửi yêu cầu lấy danh sách công thức
+            fetch('/readrecipelist', { method: 'POST' })
+                .then(response => response.json())
+                .then(recipes => {
+                    // Hiển thị danh sách công thức
+                    content1.innerHTML = `
+                        <div class="recipe-list">
+                            ${recipes
+                                .map(
+                                    recipe => `
+                                        <button class="recipe-btn" onclick="editRecipe(${recipe.id})">${recipe.name}</button>
+                                    `
+                                )
+                                .join("")}
+                            ${recipes.length < 12
+                                ? `<button class="recipe-btn add-recipe-btn" onclick="addNewRecipe()">+</button>`
+                                : ""}
+                        </div>
+                    `;
+                })
+                .catch(err => {
+                    console.error('Lỗi khi lấy danh sách công thức:', err);
+                    content1.innerHTML = `<p class="error">Không thể lấy danh sách công thức!</p>`;
+                });
+        }
+
+
+
+        function editRecipe(recipeId) {
+            fetch(`/readrecipelist`, { method: 'POST' })
+                .then(response => response.json())
+                .then(recipes => {
+                    const recipe = recipes.find(r => r.id === recipeId);
+
+                    if (!recipe) {
+                        alert('Không tìm thấy công thức!');
+                        return;
+                    }
+
+                    const content1 = document.getElementById("content-1");
+                    content1.innerHTML = `
+                        <div class="recipe-form">
+                            <h3>Chỉnh sửa công thức: ${recipe.name}</h3>
+                            <form id="editRecipeForm">
+                                <label for="cement">Xi măng (%):</label>
+                                <input type="number" id="cement" value="${recipe.cement}" min="0" max="100" required>
+                                
+                                <label for="sand">Cát (%):</label>
+                                <input type="number" id="sand" value="${recipe.sand}" min="0" max="100" required>
+                                
+                                <label for="mineral">Khoáng (%):</label>
+                                <input type="number" id="mineral" value="${recipe.mineral}" min="0" max="100" required>
+                                
+                                <label for="flyash">Tro bay (%):</label>
+                                <input type="number" id="flyash" value="${recipe.flyash}" min="0" max="100" required>
+                                
+                                <label for="additive1">Phụ gia 1 (kg):</label>
+                                <input type="number" id="additive1" value="${recipe.additive1}" min="0" required>
+                                
+                                <label for="additive2">Phụ gia 2 (kg):</label>
+                                <input type="number" id="additive2" value="${recipe.additive2}" min="0" required>
+                                
+                                <label for="additive3">Phụ gia 3 (kg):</label>
+                                <input type="number" id="additive3" value="${recipe.additive3}" min="0" required>
+                                
+                                <button type="button" onclick="saveRecipe(${recipe.id})">Lưu</button>
+                            </form>
+                        </div>
+                    `;
+                })
+                .catch(err => console.error('Lỗi khi lấy thông tin công thức:', err));
+        }
+
+        function addNewRecipe() {
+            const content1 = document.getElementById("content-1");
+            content1.innerHTML = `
+                <div class="recipe-form">
+                    <h3>Thêm công thức mới</h3>
+                    <div class="input-group">
+                        <label for="recipe-name">Tên công thức:</label>
+                        <input type="text" id="recipe-name" placeholder="Nhập tên công thức" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="cement">Xi măng (%):</label>
+                        <input type="number" id="cement" placeholder="Nhập % xi măng" min="0" max="100" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="sand">Cát (%):</label>
+                        <input type="number" id="sand" placeholder="Nhập % cát" min="0" max="100" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="mineral">Khoáng (%):</label>
+                        <input type="number" id="mineral" placeholder="Nhập % khoáng" min="0" max="100" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="flyash">Tro bay (%):</label>
+                        <input type="number" id="flyash" placeholder="Nhập % tro bay" min="0" max="100" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="additive1">Phụ gia 1 (kg):</label>
+                        <input type="number" id="additive1" placeholder="Nhập phụ gia 1" min="0" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="additive2">Phụ gia 2 (kg):</label>
+                        <input type="number" id="additive2" placeholder="Nhập phụ gia 2" min="0" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="additive3">Phụ gia 3 (kg):</label>
+                        <input type="number" id="additive3" placeholder="Nhập phụ gia 3" min="0" required>
+                    </div>
+                    <button type="button" onclick="saveNewRecipe()">Lưu công thức</button>
+                </div>
+            `;
+        }
+
+        function saveNewRecipe() {
+            const name = document.getElementById('recipe-name').value;
+            const cement = document.getElementById('cement').value;
+            const sand = document.getElementById('sand').value;
+            const mineral = document.getElementById('mineral').value;
+            const flyash = document.getElementById('flyash').value;
+            const additive1 = document.getElementById('additive1').value;
+            const additive2 = document.getElementById('additive2').value;
+            const additive3 = document.getElementById('additive3').value;
+
+            const recipe = { name, cement, sand, mineral, flyash, additive1, additive2, additive3 };
+            logMessage("save successful.");
+            console.log("Dữ liệu gửi lên server:", recipe);
+            fetch('/addrecipe', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(recipe),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    showRecipeList(); // Hiển thị lại danh sách công thức
+                })
+                .catch(err => console.error('Lỗi khi thêm công thức:', err));
+        }
+
+        function start() {
+            logMessage("System started.", 1);
+        }
 
         function getCurrentTime() {
             const now = new Date();
@@ -66,40 +390,26 @@
             return `${date} ${time}`; // Kết hợp ngày và giờ
         }
 
-        // Hàm để ghi log vào danh sách
-        function logAction(action) {
-            const logList = document.getElementById('log-list');
-            const currentTime = getCurrentTime();
-            const logItem = document.createElement('li');
-            logItem.textContent = `[${currentTime}] ${action}`;
-            logList.appendChild(logItem);
+        function logMessage(message, isError = 0) {
+            const logContainer = document.getElementById("log-container");
 
-            // Cuộn xuống cuối log
-            logList.scrollTop = logList.scrollHeight;
+            // Lấy thời gian hiện tại
+            const timestamp = getCurrentTime();
+
+            // Tạo nội dung log mới
+            const logEntry = document.createElement("div");
+            logEntry.textContent = `[${timestamp}] ${message}`;
+
+            if (isError === 1) {
+                logEntry.style.color = "red"; // Màu đỏ cho lỗi
+            } else {
+                logEntry.style.color = "black"; // Màu đen mặc định
+            }
+            logContainer.appendChild(logEntry);
+
+            // Tự động cuộn xuống cuối khung log
+            logContainer.scrollTop = logContainer.scrollHeight;
         }
-
-        // Gắn sự kiện click cho nút Auto và Manual
-        document.querySelector('.sidebar-btn:nth-child(1)').onclick = () => {
-            logAction('Auto mode activated');
-        };
-
-        document.querySelector('.sidebar-btn:nth-child(2)').onclick = () => {
-            logAction('Manual mode activated');
-        };
-
-        document.querySelector('.sidebar-btn:nth-child(6)').onclick = () => {
-            logAction('System started');
-        };
-
-        document.querySelector('.sidebar-btn:nth-child(7)').onclick = () => {
-            logAction('System reset');
-        };
-
-        document.querySelector('.sidebar-btn:nth-child(8)').onclick = () => {
-            logAction('Emergency stop activated');
-        };
-
-        
     </script>
 </body>
 </html>

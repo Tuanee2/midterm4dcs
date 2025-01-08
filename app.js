@@ -12,6 +12,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 // Cấu hình body-parser để xử lý POST request
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json()); // Để parse JSON trong request body
 
 // Cấu hình file tĩnh
 //app.use('/css', express.static(path.join(__dirname, 'public/css')));
@@ -22,7 +23,11 @@ app.get('/', homeController.getHomePage);
 
 // Route thêm người dùng
 app.post('/add-user', homeController.addUser);
-app.post('/log', homeController.addUser)
+app.post('/log', homeController.addLog);
+app.post('/addrecipe', homeController.addRecipe);
+app.post('/saverecipe', homeController.saveRecipe);
+app.post('/readrecipelist', homeController.readRecipeList);
+app.post('/deleterecipe', homeController.deleteRecipe);
 
 app.get('/mainpage', (req, res) => {
     res.render('mainpage'); // Kết xuất file mainpage.ejs
