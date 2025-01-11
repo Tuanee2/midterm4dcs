@@ -43,7 +43,7 @@
             <h3>Content Area 3</h3>
         </div>
         <div class="content-area content-4">
-            <div id="content-4" class="content-area content-4">
+            <!--<div id="content-4" class="content-area content-4"> -->
                 <div class="recipe-container">
                     <!-- Cột Công thức hiện tại -->
                     <div class="recipe-column">
@@ -78,7 +78,7 @@
                         </table>
                     </div>
                 </div>
-            </div>
+            <!-- </div> -->
         </div>
     </div>
 
@@ -143,6 +143,13 @@
                         data: [300, 310, 320, 300, 290, 280],
                         borderColor: 'rgba(54, 162, 235, 1)',
                         backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        tension: 0.4
+                    },
+                    {
+                        label: 'flyash (kg)',
+                        data: [400, 380, 350, 410, 420, 390],
+                        borderColor: 'rgba(255, 206, 86, 1)',
+                        backgroundColor: 'rgba(255, 206, 86, 0.2)',
                         tension: 0.4
                     }]
                 },
@@ -310,6 +317,7 @@
                                 
                                 <button type="button" onclick="saveRecipe(${recipe.id})">update</button>
                                 <button type="button" onclick="deleteRecipe(${recipe.id})">delete</button>
+                                <button type="button" onclick="applyRecipe()">apply</button>
                             </form>
                         </div>
                     `;
@@ -421,6 +429,30 @@
                 })
                 .catch(err => console.error('Lỗi khi xóa công thức:', err));
         }
+
+        function applyRecipe() {
+            // Lấy giá trị từ các trường nhập liệu
+            const cement = document.getElementById('cement').value || "0.000";
+            const sand = document.getElementById('sand').value || "0.000";
+            const mineral = document.getElementById('mineral').value || "0.000";
+            const flyash = document.getElementById('flyash').value || "0.000";
+            const additive1 = document.getElementById('additive1').value || "0.000";
+            const additive2 = document.getElementById('additive2').value || "0.000";
+            const additive3 = document.getElementById('additive3').value || "0.000";
+
+            // Cập nhật bảng "Công thức hiện tại"
+            document.getElementById('current-cement').textContent = parseFloat(cement).toFixed(3);
+            document.getElementById('current-sand').textContent = parseFloat(sand).toFixed(3);
+            document.getElementById('current-mineral').textContent = parseFloat(mineral).toFixed(3);
+            document.getElementById('current-flyash').textContent = parseFloat(flyash).toFixed(3);
+            document.getElementById('current-additive1').textContent = parseFloat(additive1).toFixed(3);
+            document.getElementById('current-additive2').textContent = parseFloat(additive2).toFixed(3);
+            document.getElementById('current-additive3').textContent = parseFloat(additive3).toFixed(3);
+
+            // Thông báo cập nhật thành công
+            logMessage("Recipe values applied successfully!");
+        }
+        // Hàm xử lý sự kiện khi người dùng nhấn nút "Lưu"
 
         function start() {
             logMessage("System started.", 1);
