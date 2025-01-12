@@ -213,6 +213,7 @@
             switch (buttonIndex) {
                 case 1:
                     logMessage("Cement Screw started.");
+                    openCementScrew();
                     break;
                 case 2:
                     logMessage("Turn Off action triggered!");
@@ -509,6 +510,21 @@
         }
         // Hàm xử lý sự kiện khi người dùng nhấn nút "Lưu"
 
+        function openCementScrew() {
+            fetch('/plc/openScrew', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ tag: 'Vit_Xi_DO', value: true }) // Sử dụng tag PLC
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message); // Hiển thị thông báo phản hồi
+            })
+            .catch(err => {
+                console.error('Lỗi khi gửi lệnh mở vít:', err);
+            });
+        }
+        
         function start() {
             logMessage("System started.", 1);
         }

@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const homeController = require('./controllers/homeController');
+const plcController = require('./controllers/plcController');
 
 const app = express();
 const PORT = 3000;
@@ -29,6 +30,7 @@ app.post('/saverecipe', homeController.saveRecipe);
 app.post('/readrecipelist', homeController.readRecipeList);
 app.post('/deleterecipe', homeController.deleteRecipe);
 app.post('/updaterecipe', homeController.updateRecipe);
+app.post('/openScrew', plcController.openCementScrew);
 
 app.get('/mainpage', (req, res) => {
     res.render('mainpage'); // Kết xuất file mainpage.ejs
