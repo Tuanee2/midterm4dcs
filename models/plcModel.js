@@ -33,7 +33,20 @@ const variables_write = {
     Mineral_Ash_Valve: 'DB1,X1.5', // Điều khiển van cân tro bay
     Mixer_Valve_Open: 'DB1,X1.1', // Điều khiển van máy trộn mở
     Mixer_Valve_Close: 'DB1,X1.0', // Điều khiển van máy trộn đóng
-    Conveyor_Chute: 'DB1,X1.2' // Điều khiển băng tải
+    Conveyor_Chute: 'DB1,X1.2', // Điều khiển băng tải
+    // giá trị các thành phần
+    Cement_ref: 'DB2,REAL56', // Ghi giá trị xi măng đặt
+    Sand_ref: 'DB2,REAL68',   // Ghi giá trị cát đặt
+    Mineral_ref: 'DB2,REAL64', // Ghi giá trị tro bay đặt
+    Flyash_ref: 'DB2,REAL60', // Ghi giá trị khoáng đặt
+    PG01_ref: 'DB2,REAL72',   // Ghi giá trị PG1 đặt
+    PG02_ref: 'DB2,REAL76',   // Ghi giá trị PG2 đặt
+    PG03_ref: 'DB2,REAL80',   // Ghi giá trị PG3 đặt
+    //
+    Start: 'M0.1',
+    Manul: 'M0.0',
+    Auto: 'M0.5',
+    Stop: 'M0.3'
 };
 
 // Kết nối đến PLC

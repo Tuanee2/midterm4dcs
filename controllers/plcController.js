@@ -37,7 +37,7 @@ exports.writePLCData = async (req, res) => {
 
     try {
         await plcModel.writePLCData(tag, value);
-        res.json({ message: `Đã ghi thành công giá trị ${value} vào tag ${tag}` });
+        //res.json({ message: `Đã ghi thành công giá trị ${value} vào tag ${tag}` });
     } catch (error) {
         console.error('Lỗi khi ghi dữ liệu xuống PLC:', error);
         res.status(500).json({ error: 'Không thể ghi dữ liệu xuống PLC!' });

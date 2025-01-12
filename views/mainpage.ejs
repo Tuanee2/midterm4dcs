@@ -16,9 +16,9 @@
             <button class="sidebar-btn" onclick="showTrend()">Trend</button>
             <button class="sidebar-btn">Set weight</button>
             <button class="sidebar-btn" onclick="showRecipeList()">Recipe</button>
-            <button class="sidebar-btn" onclick="start()">Start</button>
-            <button class="sidebar-btn">Reset</button>
-            <button class="sidebar-btn">Estop</button>
+            <button class="sidebar-btn" id="start-button" onclick="start()" disabled>Start</button>
+            <button class="sidebar-btn" id="reset-button" onclick="reset()" disabled>Reset</button>
+            <button class="sidebar-btn" id="stop-button" onclick="stop()" disabled>Estop</button>
             <button onclick="location.href='/';" class="sidebar-btn">Back</button>
         </div> 
 
@@ -191,6 +191,7 @@
 
         function showManual() {
             logMessage("Manual mode selected.");
+            writeplcdata("Manual", true);
             const content1 = document.getElementById("content-1");
             const buttonTasks = [
                 "Cement Screw", "Fly Ash Screw", "Sand Screw", "Mineral Screw",
@@ -213,59 +214,59 @@
             switch (buttonIndex) {
                 case 1:
                     logMessage("Cement Screw started.");
-                    writeplcdata("Cement_Screw", 1);
+                    writeplcdata("Cement_Screw", true);
                     break;
                 case 2:
                     logMessage("Flyash screw on.");
-                    writeplcdata("Flyash_Screw", 1);
+                    writeplcdata("Flyash_Screw", true);
                     break;
                 case 3:
                     logMessage("Sand Screw started.");
-                    writeplcdata("Sand_Screw", 1);
+                    writeplcdata("Sand_Screw", true);
                     break;
                 case 4:
                     logMessage("Mineral Screw started.");
-                    writeplcdata("Mineral_Screw", 1);
+                    writeplcdata("Mineral_Screw", true);
                     break;
                 case 5:
                     logMessage("Mixer started.");
-                    writeplcdata("Mixer", 1);
+                    writeplcdata("Mixer", true);
                     break;
                 case 6:
                     logMessage("Conveyor Chute started.");
-                    writeplcdata("Conveyor_Chute", 1);
+                    writeplcdata("Conveyor_Chute", true);
                     break;
                 case 7:
                     logMessage("Hopper Valve PG 1 opened.");
-                    writeplcdata("Hopper_Valve_PG1", 1);
+                    writeplcdata("Hopper_Valve_PG1", true);
                     break;
                 case 8:
                     logMessage("Hopper Valve PG 2 opened.");
-                    writeplcdata("Hopper_Valve_PG2", 1);
+                    writeplcdata("Hopper_Valve_PG2", true);
                     break;
                 case 9:
                     logMessage("Hopper Valve PG 3 opened.");
-                    writeplcdata("Hopper_Valve_PG3", 1);
+                    writeplcdata("Hopper_Valve_PG3", true);
                     break;
                 case 10:
                     logMessage("PG Scale Valve opened.");
-                    writeplcdata("PG_Scale_Valve", 1);
+                    writeplcdata("PG_Scale_Valve", true);
                     break;
                 case 11:
                     logMessage("Sand Scale Valve opened.");
-                    writeplcdata("Sand_Scale_Valve", 1);
+                    writeplcdata("Sand_Scale_Valve", true);
                     break;
                 case 12:
                     logMessage("Mineral Ash Valve opened.");
-                    writeplcdata("Mineral_Ash_Valve", 1);
+                    writeplcdata("Mineral_Ash_Valve", true);
                     break;
                 case 13:
                     logMessage("Mixer Valve Opened.");
-                    writeplcdata("Mixer_Valve", 1);
+                    writeplcdata("Mixer_Valve", true);
                     break;
                 case 14:
                     logMessage("Mixer Valve Closed.");
-                    writeplcdata("Mixer_Valve", 0);
+                    writeplcdata("Mixer_Valve", false);
                     break;
                 case 15:
                     logMessage("Power Up action triggered!");
@@ -518,6 +519,9 @@
             document.getElementById('current-additive2').textContent = parseFloat(additive2).toFixed(3);
             document.getElementById('current-additive3').textContent = parseFloat(additive3).toFixed(3);
 
+            const startButton = document.getElementById('start-button');
+            startButton.disabled = false;
+
             // Thông báo cập nhật thành công
             logMessage("Recipe values applied successfully!");
         }
@@ -539,7 +543,43 @@
         }
 
         function start() {
-            logMessage("System started.", 1);
+            logMessage("System started.");
+            // Lấy giá trị từ bảng "Công thức hiện tại"
+            const cement = parseFloat(document.getElementById('current-cement').textContent) || 0;
+            const sand = parseFloat(document.getElementById('current-sand').textContent) || 0;
+            const mineral = parseFloat(document.getElementById('current-mineral').textContent) || 0;
+            const flyash = parseFloat(document.getElementById('current-flyash').textContent) || 0;
+            const additive1 = parseFloat(document.getElementById('current-additive1').textContent) || 0;
+            const additive2 = parseFloat(document.getElementById('current-additive2').textContent) || 0;
+            const additive3 = parseFloat(document.getElementById('current-additive3').textContent) || 0;
+
+            // Gửi dữ liệu xuống PLC
+            writeplcdata('Cement_ref', cement);
+            writeplcdata('Sand_ref', sand);
+            writeplcdata('Mineral_ref', mineral);
+            writeplcdata('Flyash_ref', flyash);
+            writeplcdata('Additive1_ref', additive1);
+            writeplcdata('Additive2_ref', additive2);
+            writeplcdata('Additive3_ref', additive3);
+            writeplcdata('Start', true);
+            // Thay đổi trạng thái của nút "Start" và "Stop"
+            const stopButton = document.getElementById('stop-button');
+            stoptButton.disabled = false;
+            const startButton = document.getElementById('start-button');
+            startButton.disabled = true;
+        }
+
+        function stop() {
+            // Thực hiện các thao tác dừng hệ thống ở đây
+            writeplcdata('Stop', true);
+            const stopButton = document.getElementById('stop-button');
+            stoptButton.disabled = true;
+            logMessage("System stopped.");
+        }
+
+        function reset() {
+            // Thực hiện các thao tác reset hệ thống ở đây
+            logMessage("System reset.");
         }
 
         function getCurrentTime() {
