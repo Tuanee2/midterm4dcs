@@ -30,7 +30,7 @@ app.post('/saverecipe', homeController.saveRecipe);
 app.post('/readrecipelist', homeController.readRecipeList);
 app.post('/deleterecipe', homeController.deleteRecipe);
 app.post('/updaterecipe', homeController.updateRecipe);
-app.post('/openScrew', plcController.openCementScrew);
+app.post('/writeplcdata', plcController.writePLCData);
 
 app.get('/mainpage', (req, res) => {
     res.render('mainpage'); // Kết xuất file mainpage.ejs
