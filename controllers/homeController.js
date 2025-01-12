@@ -124,17 +124,17 @@ module.exports = {
     },
 
     deleteRecipe: (req, res) => {
-        const { id } = req.body;
+        const { name } = req.body;
     
         // Kiểm tra dữ liệu đầu vào
-        if (!id || isNaN(id)) {
-            res.status(400).json({ error: 'ID không hợp lệ!' });
+        if (!name || name.trim() === "") {
+            res.status(400).json({ error: 'Tên công thức không hợp lệ!' });
             return;
         }
     
-        const sql = 'DELETE FROM recipe WHERE id = ?';
+        const sql = 'DELETE FROM recipe WHERE name = ?';
     
-        db.run(sql, [id], function (err) {
+        db.run(sql, [name.trim()], function (err) {
             if (err) {
                 console.error(err.message);
                 res.status(500).json({ error: 'Không thể xóa công thức!' });
@@ -190,3 +190,4 @@ module.exports = {
         );
     }
 };
+

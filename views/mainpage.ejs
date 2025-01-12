@@ -32,7 +32,14 @@
 
         <!-- Main Area -->
         <div class="main-area">
-            <img src="/images/all.png" alt="Sample Image" class="main-image">
+            <div class="image-container">
+                <!-- Hình nền -->
+                <img src="/images/all.png" alt="Background Image" class="background-image">
+            
+                <!-- Hình van -->
+                <img src="/images/valve.png" alt="Valve" class="valve-image" style="top: 50%; left: 44.2%;">
+                <img src="/images/valve.png" alt="Valve" class="valve-image" style="top: 50%; left: 52%;">
+            </div>
         </div>
 
         <!-- Content Areas below -->
@@ -40,7 +47,11 @@
             <div id="log-container" class="log-container"></div>
         </div>
         <div class="content-area content-3">
-            <h3>Content Area 3</h3>
+            <div class="recipe-container">
+                <div class="recipe-column">
+
+                </div>
+            </div>
         </div>
         <div class="content-area content-4">
             <!--<div id="content-4" class="content-area content-4"> -->
@@ -79,6 +90,17 @@
                     </div>
                 </div>
             <!-- </div> -->
+        </div>
+    </div>
+
+    <!-- Popup Xác nhận -->
+    <div id="delete-confirmation" class="popup" style="display: none;">
+        <div class="popup-content">
+            <h3>Bạn có chắc chắn muốn xóa?</h3>
+            <div class="popup-buttons">
+                <button id="confirm-delete" class="popup-btn">Có</button>
+                <button id="cancel-delete" class="popup-btn">Không</button>
+            </div>
         </div>
     </div>
 
@@ -287,38 +309,53 @@
                     const content1 = document.getElementById("content-1");
                     content1.innerHTML = `
                         <div class="recipe-form">
-                            <form id="editRecipeForm">
+                            <h3>Chỉnh sửa công thức</h3>
+                            <div class="input-group">
+                                <label for="recipe-name">Tên công thức:</label>
+                                <input type="text" id="recipe-name" value="${recipe.name}" required>
+                            </div>
+                            <div class="input-group">
                                 <label for="batch_number">Num of batch:</label>
                                 <input type="number" id="batch_number" value="${recipe.batch_number}" min="0" required>
-
+                            </div>
+                            <div class="input-group">
                                 <label for="total_weight">Total weight:</label>
                                 <input type="number" id="total_weight" value="${recipe.total_weight}" min="0" required>
-
+                            </div>
+                            <div class="input-group">
                                 <label for="cement">Xi măng (%):</label>
                                 <input type="number" id="cement" value="${recipe.cement}" min="0" max="100" required>
-                                
+                            </div>
+                            <div class="input-group">
                                 <label for="sand">Cát (%):</label>
                                 <input type="number" id="sand" value="${recipe.sand}" min="0" max="100" required>
-                                
+                            </div>
+                            <div class="input-group">
                                 <label for="mineral">Khoáng (%):</label>
                                 <input type="number" id="mineral" value="${recipe.mineral}" min="0" max="100" required>
-                                
+                            </div>
+                            <div class="input-group">
                                 <label for="flyash">Tro bay (%):</label>
                                 <input type="number" id="flyash" value="${recipe.flyash}" min="0" max="100" required>
-                                
+                            </div>
+                            <div class="input-group">
                                 <label for="additive1">Phụ gia 1 (kg):</label>
                                 <input type="number" id="additive1" value="${recipe.additive1}" min="0" required>
-                                
+                            </div>
+                            <div class="input-group">
                                 <label for="additive2">Phụ gia 2 (kg):</label>
                                 <input type="number" id="additive2" value="${recipe.additive2}" min="0" required>
-                                
+                            </div>
+                            <div class="input-group">
                                 <label for="additive3">Phụ gia 3 (kg):</label>
                                 <input type="number" id="additive3" value="${recipe.additive3}" min="0" required>
-                                
-                                <button type="button" onclick="saveRecipe(${recipe.id})">update</button>
-                                <button type="button" onclick="deleteRecipe(${recipe.id})">delete</button>
-                                <button type="button" onclick="applyRecipe()">apply</button>
-                            </form>
+                            </div>
+                            <div class"manual-grid">
+                                <button type="button" onclick="saveRecipe(${recipe.recipe-name})">Update</button>
+                                <button type="button" onclick="deleteRecipeConfirmation('${recipe.name}')">Delete</button>
+                                <button type="button" onclick="showRecipeList()">Back</button>
+                                <button type="button" onclick="applyRecipe()">Apply</button>
+                            </div>
                         </div>
                     `;
                 })
@@ -403,19 +440,37 @@
                 .catch(err => console.error('Lỗi khi thêm công thức:', err));
         }
 
-        function deleteRecipe() {
-            const recipeId = document.getElementById('recipe-id').value;
+        let recipeNameToDelete = "";
 
-            // Kiểm tra nếu ID rỗng hoặc không hợp lệ
-            if (!recipeId || isNaN(recipeId)) {
-                alert('ID không hợp lệ! Vui lòng kiểm tra lại.');
+        function deleteRecipeConfirmation(recipeName) {
+            recipeNameToDelete = recipeName; // Lưu tên công thức
+            const popup = document.getElementById('delete-confirmation');
+            popup.style.display = 'flex'; // Hiển thị popup
+        }
+
+        document.getElementById('confirm-delete').addEventListener('click', () => {
+            // Xóa công thức sau khi xác nhận
+            deleteRecipe(recipeNameToDelete);
+            document.getElementById('delete-confirmation').style.display = 'none'; // Đóng popup
+        });
+
+        document.getElementById('cancel-delete').addEventListener('click', () => {
+            // Hủy xóa và đóng popup
+            document.getElementById('delete-confirmation').style.display = 'none';
+        });
+
+        function deleteRecipe(recipe_name) {
+
+            // Kiểm tra nếu tên công thức không hợp lệ
+            if (!recipe_name) {
+                alert('Tên công thức không hợp lệ! Vui lòng kiểm tra lại.');
                 return;
             }
 
             fetch('/deleteRecipe', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ id: recipeId }),
+                body: JSON.stringify({ name: recipe_name }), // Gửi trường "name" đúng với API
             })
                 .then(response => {
                     if (!response.ok) {
@@ -424,7 +479,7 @@
                     return response.json();
                 })
                 .then(data => {
-                    alert(data.message);
+                    alert(data.message); // Hiển thị thông báo thành công
                     showRecipeList(); // Hiển thị lại danh sách công thức
                 })
                 .catch(err => console.error('Lỗi khi xóa công thức:', err));

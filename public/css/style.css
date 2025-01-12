@@ -54,6 +54,29 @@ body, html {
     background-color: #5a9ba9; /* Màu khi hover */
 }
 
+.image-container {
+    position: relative; /* Tạo không gian định vị cho các thành phần con */
+    width: 100%; /* Chiều rộng container sẽ thay đổi theo màn hình */
+    height: 100%; /* Chiều cao container sẽ thay đổi theo màn hình */
+    display: flex; /* Sử dụng Flexbox để căn giữa hình nền */
+    justify-content: center; /* Căn giữa theo chiều ngang */
+    align-items: center; /* Căn giữa theo chiều dọc */
+}
+
+.background-image {
+    width: auto; /* Tự động điều chỉnh chiều rộng theo tỉ lệ */
+    height: auto; /* Tự động điều chỉnh chiều cao theo tỉ lệ */
+    max-width: 100%; /* Không vượt quá chiều rộng container */
+    max-height: 100%; /* Không vượt quá chiều cao container */
+}
+
+.valve-image {
+    position: absolute; /* Vị trí tương đối so với .image-container */
+    width: 30px; /* Kích thước cố định của van */
+    height: auto; /* Giữ nguyên tỉ lệ gốc */
+    z-index: 2; /* Đặt trên hình nền */
+    transform: translate(-50%, -50%); /* Căn chỉnh tâm điểm van */
+}
 /* Content Area */
 .content-area {
     background-color: #f0f0f0;
@@ -352,4 +375,57 @@ body, html {
 
 .recipe-form .input-group input {
     flex: 2;
+}
+
+/* Popup */
+.popup {
+    position: fixed; /* Đặt vị trí cố định */
+    top: 0;
+    left: 0;
+    width: 100vw; /* Chiếm toàn bộ chiều rộng màn hình */
+    height: 100vh; /* Chiếm toàn bộ chiều cao màn hình */
+    background-color: rgba(0, 0, 0, 0.5); /* Màu nền tối mờ */
+    display: none; /* Ẩn mặc định */
+    justify-content: center; /* Căn giữa nội dung theo chiều ngang */
+    align-items: center; /* Căn giữa nội dung theo chiều dọc */
+    z-index: 1000; /* Hiển thị trên cùng */
+}
+
+/* Nội dung popup */
+.popup-content {
+    background: #fff; /* Màu nền trắng */
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    width: 300px; /* Chiều rộng cố định */
+}
+
+/* Nút trong popup */
+.popup-buttons {
+    margin-top: 20px;
+}
+
+.popup-btn {
+    padding: 10px 20px;
+    margin: 0 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    background-color: #007bff;
+    color: #fff;
+    transition: background-color 0.3s ease;
+}
+
+.popup-btn:hover {
+    background-color: #0056b3;
+}
+
+#cancel-delete {
+    background-color: #dc3545;
+}
+
+#cancel-delete:hover {
+    background-color: #a71d2a;
 }
