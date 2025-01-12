@@ -13,15 +13,27 @@ const PLC_CONFIG = {
 
 // Biến ánh xạ để đọc và ghi
 const variables_read = {
-    Cement_Level: "DB1,REAL0", // Đọc mức xi măng
-    Sand_Level: "DB1,REAL4",   // Đọc mức cát
-    Flyash_Level: "DB1,REAL8", // Đọc mức tro bay
+    Cement_Level: 'DB1,REAL0', // Đọc mức xi măng
+    Sand_Level: 'DB1,REAL4',   // Đọc mức cát
+    Flyash_Level: 'DB1,REAL8', // Đọc mức tro bay
+    
 };
 
 const variables_write = {
-    Cement_Screw: "DB1,X0.0", // Điều khiển vít xi măng
-    Sand_Screw: "DB1,X0.1",   // Điều khiển vít cát
-    Flyash_Screw: "DB1,X0.2", // Điều khiển vít tro bay
+    Cement_Screw: 'DB1,X0.3', // Điều khiển vít xi măng
+    Sand_Screw: 'DB1,X0.4',   // Điều khiển vít cát
+    Flyash_Screw: 'DB1,X0.5', // Điều khiển vít tro bay
+    Mineral_Screw: 'DB1,X0.6', // Điều khiển vít khoáng
+    Mixer: 'DB1,X0.7',         // Điều khiển máy trộn
+    Hopper_PG1: 'DB1,X0.0',    // Điều khiển van PG1
+    Hopper_PG2: 'DB1,X0.1',    // Điều khiển van PG2
+    Hopper_PG3: 'DB1,X0.2',    // Điều khiển van PG3
+    PG_Scale_Valve: 'DB1,X1.3',   // Điều khiển van cân
+    Sand_Scale_Valve: 'DB1,X1.4', // Điều khiển van cân cát
+    Mineral_Ash_Valve: 'DB1,X1.5', // Điều khiển van cân tro bay
+    Mixer_Valve_Open: 'DB1,X1.1', // Điều khiển van máy trộn mở
+    Mixer_Valve_Close: 'DB1,X1.0', // Điều khiển van máy trộn đóng
+    Conveyor_Chute: 'DB1,X1.2' // Điều khiển băng tải
 };
 
 // Kết nối đến PLC

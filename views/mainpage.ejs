@@ -216,43 +216,56 @@
                     writeplcdata("Cement_Screw", 1);
                     break;
                 case 2:
-                    logMessage("Turn Off action triggered!");
+                    logMessage("Flyash screw on.");
+                    writeplcdata("Flyash_Screw", 1);
                     break;
                 case 3:
-                    logMessage("Increase Speed action triggered!");
+                    logMessage("Sand Screw started.");
+                    writeplcdata("Sand_Screw", 1);
                     break;
                 case 4:
-                    logMessage("Decrease Speed action triggered!");
+                    logMessage("Mineral Screw started.");
+                    writeplcdata("Mineral_Screw", 1);
                     break;
                 case 5:
-                    logMessage("Open Valve action triggered!");
+                    logMessage("Mixer started.");
+                    writeplcdata("Mixer", 1);
                     break;
                 case 6:
-                    logMessage("Close Valve action triggered!");
+                    logMessage("Conveyor Chute started.");
+                    writeplcdata("Conveyor_Chute", 1);
                     break;
                 case 7:
-                    logMessage("Start Pump action triggered!");
+                    logMessage("Hopper Valve PG 1 opened.");
+                    writeplcdata("Hopper_Valve_PG1", 1);
                     break;
                 case 8:
-                    logMessage("Stop Pump action triggered!");
+                    logMessage("Hopper Valve PG 2 opened.");
+                    writeplcdata("Hopper_Valve_PG2", 1);
                     break;
                 case 9:
-                    logMessage("Enable Alarm action triggered!");
+                    logMessage("Hopper Valve PG 3 opened.");
+                    writeplcdata("Hopper_Valve_PG3", 1);
                     break;
                 case 10:
-                    logMessage("Disable Alarm action triggered!");
+                    logMessage("PG Scale Valve opened.");
+                    writeplcdata("PG_Scale_Valve", 1);
                     break;
                 case 11:
-                    logMessage("Check Status action triggered!");
+                    logMessage("Sand Scale Valve opened.");
+                    writeplcdata("Sand_Scale_Valve", 1);
                     break;
                 case 12:
-                    logMessage("Reset System action triggered!");
+                    logMessage("Mineral Ash Valve opened.");
+                    writeplcdata("Mineral_Ash_Valve", 1);
                     break;
                 case 13:
-                    logMessage("Run Diagnostic action triggered!");
+                    logMessage("Mixer Valve Opened.");
+                    writeplcdata("Mixer_Valve", 1);
                     break;
                 case 14:
-                    logMessage("Stop Diagnostic action triggered!");
+                    logMessage("Mixer Valve Closed.");
+                    writeplcdata("Mixer_Valve", 0);
                     break;
                 case 15:
                     logMessage("Power Up action triggered!");
