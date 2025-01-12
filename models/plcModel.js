@@ -5,7 +5,7 @@ const conn = new NodeS7; // Khởi tạo client
 
 // Cấu hình kết nối PLC
 const PLC_CONFIG = {
-    host: "192.168.1.10", // Địa chỉ IP của PLC hoặc PLC Simulator
+    host: "192.168.1.2", // Địa chỉ IP của PLC hoặc PLC Simulator
     port: 102,            // Cổng giao tiếp Siemens S7 (mặc định là 102)
     rack: 0,              // Rack của PLC (thường là 0)
     slot: 1               // Slot của CPU (thường là 1 hoặc 2)
@@ -19,15 +19,15 @@ const variables_read = {
 };
 
 const variables_write = {
-    Cement_Screw: "DB1,DBX0.0", // Điều khiển vít xi măng
-    Sand_Screw: "DB1,DBX0.1",   // Điều khiển vít cát
-    Flyash_Screw: "DB1,DBX0.2", // Điều khiển vít tro bay
+    Cement_Screw: "DB1,X0.0", // Điều khiển vít xi măng
+    Sand_Screw: "DB1,X0.1",   // Điều khiển vít cát
+    Flyash_Screw: "DB1,X0.2", // Điều khiển vít tro bay
 };
 
 // Kết nối đến PLC
 async function connectPLC() {
     try {
-        await conn.connect(PLC_CONFIG);
+        conn.initiateConnection({ port: 102, host: '192.168.0.2', rack: 0, slot: 1, debug: false }, connected); 
         console.log("Kết nối PLC thành công!");
     } catch (error) {
         console.error("Lỗi khi kết nối PLC:", error);
@@ -78,3 +78,11 @@ module.exports = {
     readPLCData,
     writePLCData,
 };
+
+(async () => {
+    try {
+        await connectPLC();
+    } catch (error) {
+        console.error("Lỗi khi khởi động ứng dụng:", error);
+    }
+})();
