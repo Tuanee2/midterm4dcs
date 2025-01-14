@@ -30,6 +30,8 @@ const variables_write = {
     Mixer_Valve_Close: 'DB1,X1.0', // Điều khiển van máy trộn đóng
     Conveyor_Chute: 'DB1,X1.2', // Điều khiển băng tải
     // giá trị các thành phần
+    Total_Weight: 'DB2,REAL12', // Ghi giá trị tổng trọng lượng
+    Batch_ref: 'DB2,REAL52',    // Ghi giá trị mẻ đặt
     Cement_ref: 'DB2,REAL28', // Ghi giá trị xi măng đặt
     Sand_ref: 'DB2,REAL16',   // Ghi giá trị cát đặt
     Mineral_ref: 'DB2,REAL20', // Ghi giá trị tro bay đặt
@@ -48,7 +50,7 @@ const variables_write = {
 // Kết nối đến PLC
 async function connectPLC() {
     try {
-        conn.initiateConnection({ port: 102, host: '192.168.0.1', rack: 0, slot: 1, debug: false }, connected); 
+        conn.initiateConnection({ port: 102, host: '192.168.0.1', rack: 0, slot: 1, debug: false }); 
         console.log("Kết nối PLC thành công!");
     } catch (error) {
         console.error("Lỗi khi kết nối PLC:", error);

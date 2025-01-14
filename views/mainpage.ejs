@@ -228,9 +228,9 @@
                 { name: "Mineral Screw", tag: "Mineral_Screw" },
                 { name: "Mixer", tag: "Mixer" },
                 { name: "Conveyor Chute", tag: "Conveyor_Chute" },
-                { name: "Hopper Valve PG 1", tag: "Hopper_Valve_PG1" },
-                { name: "Hopper Valve PG 2", tag: "Hopper_Valve_PG2" },
-                { name: "Hopper Valve PG 3", tag: "Hopper_Valve_PG3" },
+                { name: "Hopper Valve PG 1", tag: "Hopper_PG1" },
+                { name: "Hopper Valve PG 2", tag: "Hopper_PG2" },
+                { name: "Hopper Valve PG 3", tag: "Hopper_PG3" },
                 { name: "PG Scale Valve", tag: "PG_Scale_Valve" },
                 { name: "Sand Scale Valve", tag: "Sand_Scale_Valve" },
                 { name: "Mineral Ash Valve", tag: "Mineral_Ash_Valve" },
@@ -574,6 +574,8 @@
 
         function start() {
             // Lấy giá trị từ bảng "Công thức hiện tại"
+            const total_weight = parseFloat(document.getElementById('total_weight').value) || 0;
+            const batch_ref = parseFloat(document.getElementById('batch_number').value) || 0;
             const cement = parseFloat(document.getElementById('current-cement').textContent) || 0;
             const sand = parseFloat(document.getElementById('current-sand').textContent) || 0;
             const mineral = parseFloat(document.getElementById('current-mineral').textContent) || 0;
@@ -584,13 +586,15 @@
 
             // Tạo danh sách các tag và giá trị cần ghi xuống PLC
             const dataToWrite = [
+                { tag: 'Total_Weight', value: total_weight },
+                { tag: 'Batch_ref', value: batch_ref },
                 { tag: 'Cement_ref', value: cement },
                 { tag: 'Sand_ref', value: sand },
                 { tag: 'Mineral_ref', value: mineral },
                 { tag: 'Flyash_ref', value: flyash },
-                { tag: 'Additive1_ref', value: additive1 },
-                { tag: 'Additive2_ref', value: additive2 },
-                { tag: 'Additive3_ref', value: additive3 },
+                { tag: 'PG01_ref', value: additive1 },
+                { tag: 'PG02_ref', value: additive2 },
+                { tag: 'PG03_ref', value: additive3 },
                 { tag: 'Start', value: true }
             ];
 

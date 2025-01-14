@@ -38,6 +38,7 @@ exports.writePLCData = async (req, res) => {
     try {
         await plcModel.writePLCData(tag, value);
         //res.json({ message: `Đã ghi thành công giá trị ${value} vào tag ${tag}` });
+        res.end();
     } catch (error) {
         console.error('Lỗi khi ghi dữ liệu xuống PLC:', error);
         res.status(500).json({ error: 'Không thể ghi dữ liệu xuống PLC!' });
@@ -71,17 +72,34 @@ exports.writeMultiplePLCData = async (req, res) => {
         return;
     }
 
+    const errors = [];
+    const successes = [];
+
     try {
         // Ghi tuần tự từng tag-value
         for (const { tag, value } of data) {
             if (!tag || value === undefined) {
-                throw new Error(`Thiếu tag hoặc value cho tag: ${tag}`);
+                errors.push({ tag, error: 'Thiếu tag hoặc value!' });
+                continue;
             }
-            await plcModel.writePLCData(tag, value);
+
+            try {
+                await plcModel.writePLCData(tag, value);
+                successes.push(tag);
+            } catch (error) {
+                console.error(`Lỗi khi ghi dữ liệu xuống PLC cho tag ${tag}:`, error);
+                errors.push({ tag, error: error.message });
+            }
         }
-        res.json({ message: 'Đã ghi thành công tất cả dữ liệu!' });
+
+        // Gửi phản hồi cuối cùng sau khi tất cả xử lý xong
+        res.json({
+            message: 'Hoàn thành ghi dữ liệu xuống PLC.',
+            successes,
+            errors,
+        });
     } catch (error) {
-        console.error('Lỗi khi ghi dữ liệu xuống PLC:', error);
-        res.status(500).json({ error: 'Không thể ghi dữ liệu xuống PLC!' });
+        console.error('Lỗi không mong muốn:', error);
+        res.status(500).json({ error: 'Không thể hoàn thành yêu cầu ghi dữ liệu xuống PLC!' });
     }
 };
