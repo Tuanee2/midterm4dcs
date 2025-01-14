@@ -626,7 +626,7 @@
             ];
 
             // Gửi toàn bộ dữ liệu xuống PLC thông qua API mới
-            fetch('/writeMultiplePLCData', {
+            fetch('/writemultipleplcdata', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ data: dataToWrite })

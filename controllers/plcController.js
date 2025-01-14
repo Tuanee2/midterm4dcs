@@ -61,3 +61,27 @@ exports.readPLCValueByTag = (req, res) => {
         }
     });
 };
+
+exports.writeMultiplePLCData = async (req, res) => {
+    const { data } = req.body; // `data` là một mảng [{ tag, value }, ...]
+
+    // Kiểm tra dữ liệu đầu vào
+    if (!Array.isArray(data) || data.length === 0) {
+        res.status(400).json({ error: 'Dữ liệu đầu vào không hợp lệ! Phải là một mảng các đối tượng { tag, value }.' });
+        return;
+    }
+
+    try {
+        // Ghi tuần tự từng tag-value
+        for (const { tag, value } of data) {
+            if (!tag || value === undefined) {
+                throw new Error(`Thiếu tag hoặc value cho tag: ${tag}`);
+            }
+            await plcModel.writePLCData(tag, value);
+        }
+        res.json({ message: 'Đã ghi thành công tất cả dữ liệu!' });
+    } catch (error) {
+        console.error('Lỗi khi ghi dữ liệu xuống PLC:', error);
+        res.status(500).json({ error: 'Không thể ghi dữ liệu xuống PLC!' });
+    }
+};
