@@ -542,6 +542,42 @@
             });
         }
 
+        function updateActualValues() {
+            // Các tag cần đọc
+            const tags = {
+                cement: "Cement_Value",
+                sand: "Sand_Value",
+                mineral: "Mineral_Value",
+                flyash: "Flyash_Value",
+                additive1: "Additive1_Value",
+                additive2: "Additive2_Value",
+                additive3: "Additive3_Value"
+            };
+
+            // Lặp qua các tag để đọc giá trị
+            Object.keys(tags).forEach(key => {
+                fetch('/readPLCValueByTag', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ tag: tags[key] })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.value !== undefined) {
+                        // Cập nhật giá trị vào bảng "Giá trị thực tế"
+                        const cell = document.getElementById(`actual-${key}`);
+                        cell.textContent = parseFloat(data.value).toFixed(3);
+                    } else {
+                        console.error(`Lỗi khi đọc giá trị từ tag "${tags[key]}":`, data.error);
+                    }
+                })
+                .catch(err => console.error(`Lỗi khi gọi API cho tag "${tags[key]}":`, err));
+            });
+        }
+
+        // Gọi hàm mỗi giây để cập nhật bảng
+        setInterval(updateActualValues, 1000);
+
         function start() {
             logMessage("System started.");
             // Lấy giá trị từ bảng "Công thức hiện tại"

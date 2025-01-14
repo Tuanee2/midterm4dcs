@@ -43,3 +43,21 @@ exports.writePLCData = async (req, res) => {
         res.status(500).json({ error: 'Không thể ghi dữ liệu xuống PLC!' });
     }
 };
+
+exports.readPLCValueByTag = (req, res) => {
+    const { tag } = req.body;
+
+    // Kiểm tra nếu tag không được truyền hoặc không hợp lệ
+    if (!tag) {
+        res.status(400).json({ error: 'Tag không được để trống!' });
+        return;
+    }
+
+    plcModel.readSinglePLCData(tag, (error, value) => {
+        if (error) {
+            res.status(500).json({ error: `Không thể đọc giá trị từ tag "${tag}". Lỗi: ${error.message}` });
+        } else {
+            res.json({ tag: tag, value: value });
+        }
+    });
+};

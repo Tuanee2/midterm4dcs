@@ -31,6 +31,8 @@ app.post('/readrecipelist', homeController.readRecipeList);
 app.post('/deleterecipe', homeController.deleteRecipe);
 app.post('/updaterecipe', homeController.updateRecipe);
 app.post('/writeplcdata', plcController.writePLCData);
+app.post('/readplcdata', plcController.readPLCData);
+app.post('readplcvaluebytag', plcController.readPLCValueByTag);
 
 app.get('/mainpage', (req, res) => {
     res.render('mainpage'); // Kết xuất file mainpage.ejs

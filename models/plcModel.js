@@ -3,20 +3,15 @@ const NodeS7 = require('nodes7');
 
 const conn = new NodeS7; // Khởi tạo client
 
-// Cấu hình kết nối PLC
-const PLC_CONFIG = {
-    host: "192.168.1.2", // Địa chỉ IP của PLC hoặc PLC Simulator
-    port: 102,            // Cổng giao tiếp Siemens S7 (mặc định là 102)
-    rack: 0,              // Rack của PLC (thường là 0)
-    slot: 1               // Slot của CPU (thường là 1 hoặc 2)
-};
-
 // Biến ánh xạ để đọc và ghi
 const variables_read = {
-    Cement_Level: 'DB1,REAL0', // Đọc mức xi măng
-    Sand_Level: 'DB1,REAL4',   // Đọc mức cát
-    Flyash_Level: 'DB1,REAL8', // Đọc mức tro bay
-    
+    Cement_Value: 'DB2,REAL56', // Đọc mức xi măng
+    Sand_Value: 'DB2,REAL68',   // Đọc mức cát
+    Flyash_Value: 'DB2,REAL60', // Đọc mức tro bay
+    Mineral_Value: 'DB2,REAL64', // Đọc mức khoáng
+    PG01_Value: 'DB2,REAL72',   // Đọc mức PG1
+    PG02_Value: 'DB2,REAL76',   // Đọc mức PG2
+    PG03_Value: 'DB2,REAL80',   // Đọc mức PG3
 };
 
 const variables_write = {
@@ -35,18 +30,19 @@ const variables_write = {
     Mixer_Valve_Close: 'DB1,X1.0', // Điều khiển van máy trộn đóng
     Conveyor_Chute: 'DB1,X1.2', // Điều khiển băng tải
     // giá trị các thành phần
-    Cement_ref: 'DB2,REAL56', // Ghi giá trị xi măng đặt
-    Sand_ref: 'DB2,REAL68',   // Ghi giá trị cát đặt
-    Mineral_ref: 'DB2,REAL64', // Ghi giá trị tro bay đặt
-    Flyash_ref: 'DB2,REAL60', // Ghi giá trị khoáng đặt
-    PG01_ref: 'DB2,REAL72',   // Ghi giá trị PG1 đặt
-    PG02_ref: 'DB2,REAL76',   // Ghi giá trị PG2 đặt
-    PG03_ref: 'DB2,REAL80',   // Ghi giá trị PG3 đặt
+    Cement_ref: 'DB2,REAL28', // Ghi giá trị xi măng đặt
+    Sand_ref: 'DB2,REAL16',   // Ghi giá trị cát đặt
+    Mineral_ref: 'DB2,REAL20', // Ghi giá trị tro bay đặt
+    Flyash_ref: 'DB2,REAL24', // Ghi giá trị khoáng đặt
+    PG01_ref: 'DB2,REAL92',   // Ghi giá trị PG1 đặt
+    PG02_ref: 'DB2,REAL96',   // Ghi giá trị PG2 đặt
+    PG03_ref: 'DB2,REAL100',   // Ghi giá trị PG3 đặt
     //
     Start: 'M0.1',
     Manul: 'M0.0',
     Auto: 'M0.5',
-    Stop: 'M0.3'
+    Stop: 'M0.3',
+    Reset: 'M51.4'
 };
 
 // Kết nối đến PLC
@@ -80,6 +76,29 @@ function readPLCData() {
     });
 }
 
+function readSinglePLCData(tag, callback) {
+    // Kiểm tra xem tag có trong biến `variables_read` không
+    if (!variables_read[tag]) {
+        console.error(`Tag "${tag}" không tồn tại trong variables_read.`);
+        callback(new Error(`Tag "${tag}" không hợp lệ.`), null);
+        return;
+    }
+
+    // Cấu hình ánh xạ tag
+    conn.setTranslationCB((t) => variables_read[t]);
+
+    // Đọc giá trị từ tag
+    conn.addItems([tag]);
+    conn.readAllItems((error, values) => {
+        if (error) {
+            console.error("Lỗi khi đọc giá trị từ PLC:", error);
+            callback(error, null);
+        } else {
+            callback(null, values[tag]); // Trả về giá trị của tag
+        }
+    });
+}
+
 // Ghi dữ liệu xuống PLC
 function writePLCData(tag, value) {
     // Cấu hình ánh xạ biến
@@ -101,13 +120,14 @@ function writePLCData(tag, value) {
 module.exports = {
     connectPLC,
     readPLCData,
+    readSinglePLCData,
     writePLCData,
 };
 
 (async () => {
-    try {
-        await connectPLC();
-    } catch (error) {
-        console.error("Lỗi khi khởi động ứng dụng:", error);
-    }
+   try {
+       await connectPLC();
+   } catch (error) {
+       console.error("Lỗi khi khởi động ứng dụng:", error);
+   }
 })();
