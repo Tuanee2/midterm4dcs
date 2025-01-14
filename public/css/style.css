@@ -171,21 +171,31 @@ body, html {
 .manual-btn {
     width: 150px; /* Chiều rộng cố định */
     height: 50px; /* Chiều cao cố định */
-    padding: 0; /* Loại bỏ padding mặc định để nút không vượt kích thước */
-    background-color: #4caf50;
+    padding: 0; /* Loại bỏ padding mặc định */
+    background-color: #4caf50; /* Màu mặc định - chờ bật */
     border: none;
     border-radius: 5px;
     color: white;
     cursor: pointer;
     text-align: center;
-    font-size: 14px; /* Đảm bảo kích thước chữ phù hợp */
+    font-size: 14px; /* Kích thước chữ */
     line-height: 50px; /* Căn chỉnh chữ theo chiều cao nút */
     transition: background-color 0.3s ease;
 }
 
-
+/* Khi hover trên nút ở trạng thái chờ bật */
 .manual-btn:hover {
-    background-color: #45a049;
+    background-color: #45a049; /* Màu hover khi ở trạng thái chờ bật */
+}
+
+/* Trạng thái chờ tắt */
+.manual-btn.off {
+    background-color: #dc3545; /* Màu đỏ cho trạng thái chờ tắt */
+}
+
+/* Khi hover trên nút ở trạng thái chờ tắt */
+.manual-btn.off:hover {
+    background-color: #a71d2a; /* Màu đỏ đậm hơn khi hover */
 }
 
 /* Log Container */

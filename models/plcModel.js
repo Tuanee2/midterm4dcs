@@ -48,7 +48,7 @@ const variables_write = {
 // Kết nối đến PLC
 async function connectPLC() {
     try {
-        conn.initiateConnection({ port: 102, host: '192.168.0.2', rack: 0, slot: 1, debug: false }, connected); 
+        conn.initiateConnection({ port: 102, host: '192.168.0.1', rack: 0, slot: 1, debug: false }, connected); 
         console.log("Kết nối PLC thành công!");
     } catch (error) {
         console.error("Lỗi khi kết nối PLC:", error);

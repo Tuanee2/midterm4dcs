@@ -217,90 +217,59 @@
         function showManual() {
             logMessage("Manual mode selected.");
             writeplcdata("Manual", true);
+
             const content1 = document.getElementById("content-1");
+
+            // Danh sách các nút và tag PLC tương ứng
             const buttonTasks = [
-                "Cement Screw", "Fly Ash Screw", "Sand Screw", "Mineral Screw",
-                "Mixer", "Conveyor Chute", "Hopper Valve PG 1", "Hopper Valve PG 2",
-                "Hopper Valve PG 3", "PG Scale Valve", "Sand Scale Valve", "Mineral Ash Valve",
-                "Mixer Valve Open", "Mixer Valve Close", "Sand Valve Vibrator", "PG Ash Valve Vibrator"
+                { name: "Cement Screw", tag: "Cement_Screw" },
+                { name: "Fly Ash Screw", tag: "Flyash_Screw" },
+                { name: "Sand Screw", tag: "Sand_Screw" },
+                { name: "Mineral Screw", tag: "Mineral_Screw" },
+                { name: "Mixer", tag: "Mixer" },
+                { name: "Conveyor Chute", tag: "Conveyor_Chute" },
+                { name: "Hopper Valve PG 1", tag: "Hopper_Valve_PG1" },
+                { name: "Hopper Valve PG 2", tag: "Hopper_Valve_PG2" },
+                { name: "Hopper Valve PG 3", tag: "Hopper_Valve_PG3" },
+                { name: "PG Scale Valve", tag: "PG_Scale_Valve" },
+                { name: "Sand Scale Valve", tag: "Sand_Scale_Valve" },
+                { name: "Mineral Ash Valve", tag: "Mineral_Ash_Valve" },
+                { name: "Mixer Valve Open", tag: "Mixer_Valve_Open" },
+                { name: "Mixer Valve Close", tag: "Mixer_Valve_Close" },
+                { name: "Sand Valve Vibrator", tag: "Sand_Valve_Vibrator" },
+                { name: "PG Ash Valve Vibrator", tag: "PG_Ash_Valve_Vibrator" }
             ];
 
+            // Tạo HTML cho các nút
             content1.innerHTML = `
-        
                 <div class="manual-grid">
-                    ${buttonTasks.map((task, index) => 
-                        `<button class="manual-btn" onclick="handleButtonClick(${index + 1})">${task}</button>`
-                    ).join("")}
+                    ${buttonTasks.map(task => `
+                        <button 
+                            class="manual-btn on" 
+                            data-tag="${task.tag}" 
+                            onclick="handleManualButtonClick('${task.tag}', this)">
+                            ${task.name}
+                        </button>
+                    `).join("")}
                 </div>
             `;
         }
 
-        function handleButtonClick(buttonIndex) {
-            switch (buttonIndex) {
-                case 1:
-                    logMessage("Cement Screw started.");
-                    writeplcdata("Cement_Screw", true);
-                    break;
-                case 2:
-                    logMessage("Flyash screw on.");
-                    writeplcdata("Flyash_Screw", true);
-                    break;
-                case 3:
-                    logMessage("Sand Screw started.");
-                    writeplcdata("Sand_Screw", true);
-                    break;
-                case 4:
-                    logMessage("Mineral Screw started.");
-                    writeplcdata("Mineral_Screw", true);
-                    break;
-                case 5:
-                    logMessage("Mixer started.");
-                    writeplcdata("Mixer", true);
-                    break;
-                case 6:
-                    logMessage("Conveyor Chute started.");
-                    writeplcdata("Conveyor_Chute", true);
-                    break;
-                case 7:
-                    logMessage("Hopper Valve PG 1 opened.");
-                    writeplcdata("Hopper_Valve_PG1", true);
-                    break;
-                case 8:
-                    logMessage("Hopper Valve PG 2 opened.");
-                    writeplcdata("Hopper_Valve_PG2", true);
-                    break;
-                case 9:
-                    logMessage("Hopper Valve PG 3 opened.");
-                    writeplcdata("Hopper_Valve_PG3", true);
-                    break;
-                case 10:
-                    logMessage("PG Scale Valve opened.");
-                    writeplcdata("PG_Scale_Valve", true);
-                    break;
-                case 11:
-                    logMessage("Sand Scale Valve opened.");
-                    writeplcdata("Sand_Scale_Valve", true);
-                    break;
-                case 12:
-                    logMessage("Mineral Ash Valve opened.");
-                    writeplcdata("Mineral_Ash_Valve", true);
-                    break;
-                case 13:
-                    logMessage("Mixer Valve Opened.");
-                    writeplcdata("Mixer_Valve", true);
-                    break;
-                case 14:
-                    logMessage("Mixer Valve Closed.");
-                    writeplcdata("Mixer_Valve", false);
-                    break;
-                case 15:
-                    logMessage("Power Up action triggered!");
-                    break;
-                case 16:
-                    logMessage("Power Down action triggered!");
-                    break;
-                default:
-                    alert("Unknown action!");
+        function handleManualButtonClick(tag, button) {
+            // Kiểm tra trạng thái hiện tại của nút
+            const isOn = button.classList.contains('on'); // Kiểm tra xem nút có lớp 'on' hay không 
+
+            // Cập nhật giao diện nút
+            if (isOn) {
+                writeplcdata(tag, true);
+                button.classList.remove('on');
+                button.classList.add('off');
+                logMessage(`${tag} turned OFF.`);
+            } else {
+                writeplcdata(tag, false);
+                button.classList.remove('off');
+                button.classList.add('on');
+                logMessage(`${tag} turned ON.`);
             }
         }
 
