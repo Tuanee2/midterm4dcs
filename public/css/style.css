@@ -64,10 +64,10 @@ body, html {
 }
 
 .background-image {
-    width: auto; /* Tự động điều chỉnh chiều rộng theo tỉ lệ */
-    height: auto; /* Tự động điều chỉnh chiều cao theo tỉ lệ */
-    max-width: 100%; /* Không vượt quá chiều rộng container */
-    max-height: 100%; /* Không vượt quá chiều cao container */
+    position: absolute;
+    max-width: 100%;   /* Đảm bảo không vượt quá chiều rộng khung cha */
+    max-height: 100%;  /* Đảm bảo không vượt quá chiều cao khung cha */
+    object-fit: contain; /* Giữ tỷ lệ gốc của hình ảnh */
 }
 
 .valve-image {
@@ -77,6 +77,28 @@ body, html {
     z-index: 2; /* Đặt trên hình nền */
     transform: translate(-50%, -50%); /* Căn chỉnh tâm điểm van */
 }
+
+.motor-image {
+    position: absolute; /* Vị trí tương đối so với .image-container */
+    width: 50px; /* Kích thước cố định của van */
+    height: auto; /* Giữ nguyên tỉ lệ gốc */
+    z-index: 2; /* Đặt trên hình nền */
+    transform: translate(-50%, -50%); /* Căn chỉnh tâm điểm van */
+}
+
+.scale-value {
+    position: absolute;
+    background-color: hsla(182, 100%, 48%, 0.992);
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #000;
+    text-align: center;
+    transform: translate(-50%, -50%);
+    pointer-events: none; /* Không cho phép tương tác */
+}
+
 /* Content Area */
 .content-area {
     background-color: #f0f0f0;
@@ -429,3 +451,4 @@ body, html {
 #cancel-delete:hover {
     background-color: #a71d2a;
 }
+

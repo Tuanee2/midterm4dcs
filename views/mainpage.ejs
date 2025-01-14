@@ -39,6 +39,14 @@
                 <!-- Hình van -->
                 <img src="/images/valve.png" alt="Valve" class="valve-image" style="top: 50%; left: 44.2%;">
                 <img src="/images/valve.png" alt="Valve" class="valve-image" style="top: 50%; left: 52%;">
+                <img src="/images/MotorL.png" alt="Valve" class="motor-image" style="top: 2%; left: 8%;">
+                <img src="/images/MotorL.png" alt="Valve" class="motor-image" style="top: 7%; left: 8%;">
+                <img src="/images/MotorR.png" alt="Valve" class="motor-image" style="top: 2%; left: 90%;">
+                <img src="/images/MotorR.png" alt="Valve" class="motor-image" style="top: 7%; left: 90%;">
+                
+                <div id="scale-left" class="scale-value" style="top: 30%; left: 45%;">0.000</div>
+                <div id="scale-right" class="scale-value" style="top: 30%; left: 52.7%;">0.000</div>
+                <div id="PG-scale-right" class="scale-value" style="top: 42%; left: 23.5%;">0.000</div>
             </div>
         </div>
 
@@ -49,8 +57,25 @@
         <div class="content-area content-3">
             <div class="recipe-container">
                 <div class="recipe-column">
-
+                    <table>
+                        <tr><td>Mixing time ref</td><td>0.000</td></tr>
+                        <tr><td>Mixing time actual</td><td>0.000</td></tr>
+                        <tr><td>Water ref</td><td>0.000</td></tr>
+                        <tr><td>Water actual</td><td>0.000</td></tr>
+                    </table>
                 </div>
+
+                <div class="recipe-column">
+                    <table>
+                        <tr><td>Mixing time ref</td><td>0.000</td></tr>
+                        <tr><td>Mixing time actual</td><td>0.000</td></tr>
+                        <tr><td>Water ref</td><td>0.000</td></tr>
+                        <tr><td>Water actual</td><td>0.000</td></tr>
+                        <tr><td>Water ref</td><td>0.000</td></tr>
+                        <tr><td>Water actual</td><td>0.000</td></tr>
+                    </table>
+                </div>
+
             </div>
         </div>
         <div class="content-area content-4">
@@ -96,10 +121,10 @@
     <!-- Popup Xác nhận -->
     <div id="delete-confirmation" class="popup" style="display: none;">
         <div class="popup-content">
-            <h3>Bạn có chắc chắn muốn xóa?</h3>
+            <h3>Are you sure to delete this recipe?</h3>
             <div class="popup-buttons">
-                <button id="confirm-delete" class="popup-btn">Có</button>
-                <button id="cancel-delete" class="popup-btn">Không</button>
+                <button id="confirm-delete" class="popup-btn">Yes</button>
+                <button id="cancel-delete" class="popup-btn">No</button>
             </div>
         </div>
     </div>
@@ -440,7 +465,7 @@
             const total_weight = document.getElementById('total_weight').value;
 
             const recipe = { name, cement, sand, mineral, flyash, additive1, additive2, additive3 , total_weight, batch_number};
-            logMessage("save successful.");
+            logMessage("New recipe saved successfully.");
             console.log("Dữ liệu gửi lên server:", recipe);
             fetch('/addrecipe', {
                 method: 'POST',
@@ -576,10 +601,9 @@
         }
 
         // Gọi hàm mỗi giây để cập nhật bảng
-        setInterval(updateActualValues, 1000);
+        setInterval(updateActualValues, 10000);
 
         function start() {
-            logMessage("System started.");
             // Lấy giá trị từ bảng "Công thức hiện tại"
             const cement = parseFloat(document.getElementById('current-cement').textContent) || 0;
             const sand = parseFloat(document.getElementById('current-sand').textContent) || 0;
@@ -589,20 +613,42 @@
             const additive2 = parseFloat(document.getElementById('current-additive2').textContent) || 0;
             const additive3 = parseFloat(document.getElementById('current-additive3').textContent) || 0;
 
-            // Gửi dữ liệu xuống PLC
-            writeplcdata('Cement_ref', cement);
-            writeplcdata('Sand_ref', sand);
-            writeplcdata('Mineral_ref', mineral);
-            writeplcdata('Flyash_ref', flyash);
-            writeplcdata('Additive1_ref', additive1);
-            writeplcdata('Additive2_ref', additive2);
-            writeplcdata('Additive3_ref', additive3);
-            writeplcdata('Start', true);
-            // Thay đổi trạng thái của nút "Start" và "Stop"
-            const stopButton = document.getElementById('stop-button');
-            stoptButton.disabled = false;
-            const startButton = document.getElementById('start-button');
-            startButton.disabled = true;
+            // Tạo danh sách các tag và giá trị cần ghi xuống PLC
+            const dataToWrite = [
+                { tag: 'Cement_ref', value: cement },
+                { tag: 'Sand_ref', value: sand },
+                { tag: 'Mineral_ref', value: mineral },
+                { tag: 'Flyash_ref', value: flyash },
+                { tag: 'Additive1_ref', value: additive1 },
+                { tag: 'Additive2_ref', value: additive2 },
+                { tag: 'Additive3_ref', value: additive3 },
+                { tag: 'Start', value: true }
+            ];
+
+            // Gửi toàn bộ dữ liệu xuống PLC thông qua API mới
+            fetch('/writeMultiplePLCData', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ data: dataToWrite })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Lỗi khi gửi dữ liệu xuống PLC!');
+                }
+                return response.json();
+            })
+            .then(data => {
+                logMessage("System started: " + data.message);
+                // Thay đổi trạng thái của nút "Start" và "Stop"
+                const stopButton = document.getElementById('stop-button');
+                stopButton.disabled = false;
+                const startButton = document.getElementById('start-button');
+                startButton.disabled = true;
+            })
+            .catch(err => {
+                console.error('Lỗi khi gửi dữ liệu xuống PLC:', err);
+                logMessage('Error starting system.', 1); // Log lỗi với màu đỏ
+            });
         }
 
         function stop() {
