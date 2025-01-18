@@ -667,6 +667,22 @@
 
             // Tự động cuộn xuống cuối khung log
             logContainer.scrollTop = logContainer.scrollHeight;
+
+            fetch('/addLog', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    timestamp: timestamp, // Gửi timestamp đầy đủ
+                    message_text: message 
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Log saved successfully:', data.message);
+            })
+            .catch(err => {
+                console.error('Error saving log to database:', err);
+            });
         }
     </script>
 </body>

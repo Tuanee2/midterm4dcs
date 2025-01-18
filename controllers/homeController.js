@@ -30,17 +30,23 @@ module.exports = {
 
     // ghi log xuống database
     addLog: (req, res) => {
-        const { date, message_text } = req.body; // Lấy dữ liệu từ request body
-        
-        const sql = 'INSERT INTO Log (date, time, message_text) VALUES (?, TIME("now"), ?)';
-        
-        db.run(sql, [date, message_text], (err) => {
+        const { timestamp, message_text } = req.body; // Lấy dữ liệu từ request body
+    
+        // Kiểm tra dữ liệu đầu vào
+        if (!timestamp || !message_text) {
+            return res.status(400).json({ error: 'Dữ liệu không hợp lệ! Cần có "timestamp" và "message_text".' });
+        }
+    
+        const sql = 'INSERT INTO Log (timestamp, message_text) VALUES (?, ?)';
+    
+        db.run(sql, [timestamp, message_text], function (err) {
             if (err) {
-                console.error(err.message);
-                res.render('error', { message: 'Không thể thêm log!' }); // Hiển thị lỗi nếu có
-            } else {
-                res.redirect('/'); // Chuyển hướng sau khi thêm thành công
+                console.error('Lỗi khi thêm log:', err.message);
+                return res.status(500).json({ error: 'Không thể thêm log vào cơ sở dữ liệu!' });
             }
+    
+            // Phản hồi thành công
+            res.status(201).json({ message: 'Thêm log thành công!', id: this.lastID });
         });
     },
 

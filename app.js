@@ -24,7 +24,7 @@ app.get('/', homeController.getHomePage);
 
 // Route thêm người dùng
 app.post('/add-user', homeController.addUser);
-app.post('/log', homeController.addLog);
+app.post('/addLog', homeController.addLog);
 app.post('/addrecipe', homeController.addRecipe);
 app.post('/saverecipe', homeController.saveRecipe);
 app.post('/readrecipelist', homeController.readRecipeList);
