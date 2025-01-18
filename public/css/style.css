@@ -462,3 +462,11 @@ body, html {
     background-color: #a71d2a;
 }
 
+.status-circle {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: red; /* Màu đỏ mặc định (không hoạt động) */
+    border: 2px solid #000; /* Đường viền cho hình tròn */
+}

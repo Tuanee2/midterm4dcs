@@ -14,7 +14,7 @@
             <button class="sidebar-btn" onclick="automode()">Auto</button>
             <button class="sidebar-btn" onclick="showManual()">Manual</button>
             <button class="sidebar-btn" onclick="showTrend()">Trend</button>
-            <button class="sidebar-btn">Set weight</button>
+            <!-- <button class="sidebar-btn">Set weight</button> -->
             <button class="sidebar-btn" onclick="showRecipeList()">Recipe</button>
             <button class="sidebar-btn" id="start-button" onclick="start()" disabled>Start</button>
             <button class="sidebar-btn" id="reset-button" onclick="reset()" disabled>Reset</button>
@@ -30,6 +30,7 @@
             </div>
         </div>
 
+
         <!-- Main Area -->
         <div class="main-area">
             <div class="image-container">
@@ -38,16 +39,31 @@
             
                 <!-- Hình van -->
                 <img src="/images/valve.png" alt="Valve" class="valve-image" style="top: 51%; left: 44.2%;">
+                <div id="valve-1-status" class="status-circle" style="top: 49%; left: 40%;"></div>
                 <img src="/images/valve.png" alt="Valve" class="valve-image" style="top: 51%; left: 52%;">
+                <div id="valve-2-status" class="status-circle" style="top: 49%; left: 48%;"></div>
                 <img src="/images/valve.png" alt="Valve" class="valve-image" style="top: 51%; left: 22.6%;">
+                <div id="valve-3-status" class="status-circle" style="top: 49%; left: 18%;"></div>
                 <img src="/images/valve.png" alt="Valve" class="valve-image" style="top: 33%; left: 29.4%;">
+                <div id="valve-4-status" class="status-circle" style="top: 31%; left: 25%;"></div>
                 <img src="/images/valve.png" alt="Valve" class="valve-image" style="top: 33%; left: 22.6%;">
+                <div id="valve-5-status" class="status-circle" style="top: 31%; left: 18%;"></div>
                 <img src="/images/valve.png" alt="Valve" class="valve-image" style="top: 33%; left: 15.8%;">
+                <div id="valve-6-status" class="status-circle" style="top: 31%; left: 11%;"></div>
+                <img src="/images/valve.png" alt="Valve" class="valve-image" style="top: 85%; left: 44.2%;">
+                <div id="valve-7-status" class="status-circle" style="top: 83%; left: 40%;"></div>
                 <img src="/images/MotorL.png" alt="Valve" class="motor-image" style="top: 2%; left: 8%;">
+                <div id="valve-8-status" class="status-circle" style="top: 0.5%; left: 3%;"></div>
                 <img src="/images/MotorL.png" alt="Valve" class="motor-image" style="top: 7%; left: 8%;">
+                <div id="valve-9-status" class="status-circle" style="top: 5.5%; left: 3%;"></div>
+                <img src="/images/MotorL.png" alt="Valve" class="motor-image" style="top: 70%; left: 35%;">
+                <div id="valve-10-status" class="status-circle" style="top: 68.5%; left: 30%;"></div>
                 <img src="/images/MotorL.png" alt="Valve" class="motor-image" style="top: 95%; left: 40%;">
+                <div id="valve-11-status" class="status-circle" style="top: 93.5%; left: 35%;"></div>
                 <img src="/images/MotorR.png" alt="Valve" class="motor-image" style="top: 2%; left: 90%;">
+                <div id="valve-12-status" class="status-circle" style="top: 0.5%; left: 93%;"></div>
                 <img src="/images/MotorR.png" alt="Valve" class="motor-image" style="top: 7%; left: 90%;">
+                <div id="valve-13-status" class="status-circle" style="top: 5.5%; left: 93%;"></div>
                 
                 <div id="scale-left" class="scale-value" style="top: 30%; left: 45%;">0.000</div>
                 <div id="scale-right" class="scale-value" style="top: 30%; left: 52.7%;">0.000</div>
