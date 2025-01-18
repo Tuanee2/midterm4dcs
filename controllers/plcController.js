@@ -63,43 +63,43 @@ exports.readPLCValueByTag = (req, res) => {
     });
 };
 
-exports.writeMultiplePLCData = async (req, res) => {
-    const { data } = req.body; // `data` là một mảng [{ tag, value }, ...]
+// exports.writeMultiplePLCData = async (req, res) => {
+//     const { data } = req.body; // `data` là một mảng [{ tag, value }, ...]
 
-    // Kiểm tra dữ liệu đầu vào
-    if (!Array.isArray(data) || data.length === 0) {
-        res.status(400).json({ error: 'Dữ liệu đầu vào không hợp lệ! Phải là một mảng các đối tượng { tag, value }.' });
-        return;
-    }
+//     // Kiểm tra dữ liệu đầu vào
+//     if (!Array.isArray(data) || data.length === 0) {
+//         res.status(400).json({ error: 'Dữ liệu đầu vào không hợp lệ! Phải là một mảng các đối tượng { tag, value }.' });
+//         return;
+//     }
 
-    const errors = [];
-    const successes = [];
+//     const errors = [];
+//     const successes = [];
 
-    try {
-        // Ghi tuần tự từng tag-value
-        for (const { tag, value } of data) {
-            if (!tag || value === undefined) {
-                errors.push({ tag, error: 'Thiếu tag hoặc value!' });
-                continue;
-            }
+//     try {
+//         // Ghi tuần tự từng tag-value
+//         for (const { tag, value } of data) {
+//             if (!tag || value === undefined) {
+//                 errors.push({ tag, error: 'Thiếu tag hoặc value!' });
+//                 continue;
+//             }
 
-            try {
-                await plcModel.writePLCData(tag, value);
-                successes.push(tag);
-            } catch (error) {
-                console.error(`Lỗi khi ghi dữ liệu xuống PLC cho tag ${tag}:`, error);
-                errors.push({ tag, error: error.message });
-            }
-        }
+//             try {
+//                 await plcModel.writePLCData(tag, value);
+//                 successes.push(tag);
+//             } catch (error) {
+//                 console.error(`Lỗi khi ghi dữ liệu xuống PLC cho tag ${tag}:`, error);
+//                 errors.push({ tag, error: error.message });
+//             }
+//         }
 
-        // Gửi phản hồi cuối cùng sau khi tất cả xử lý xong
-        res.json({
-            message: 'Hoàn thành ghi dữ liệu xuống PLC.',
-            successes,
-            errors,
-        });
-    } catch (error) {
-        console.error('Lỗi không mong muốn:', error);
-        res.status(500).json({ error: 'Không thể hoàn thành yêu cầu ghi dữ liệu xuống PLC!' });
-    }
-};
+//         // Gửi phản hồi cuối cùng sau khi tất cả xử lý xong
+//         res.json({
+//             message: 'Hoàn thành ghi dữ liệu xuống PLC.',
+//             successes,
+//             errors,
+//         });
+//     } catch (error) {
+//         console.error('Lỗi không mong muốn:', error);
+//         res.status(500).json({ error: 'Không thể hoàn thành yêu cầu ghi dữ liệu xuống PLC!' });
+//     }
+// };

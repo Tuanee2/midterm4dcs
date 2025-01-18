@@ -31,7 +31,7 @@ app.post('/readrecipelist', homeController.readRecipeList);
 app.post('/deleterecipe', homeController.deleteRecipe);
 app.post('/updaterecipe', homeController.updateRecipe);
 app.post('/writeplcdata', plcController.writePLCData);
-app.post('/writemutilplcdata', plcController.writeMultiplePLCData);
+//app.post('/writemutilplcdata', plcController.writeMultiplePLCData);
 app.post('/readplcdata', plcController.readPLCData);
 app.post('readplcvaluebytag', plcController.readPLCValueByTag);
 

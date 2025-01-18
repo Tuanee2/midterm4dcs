@@ -45,6 +45,7 @@
                 <img src="/images/valve.png" alt="Valve" class="valve-image" style="top: 33%; left: 15.8%;">
                 <img src="/images/MotorL.png" alt="Valve" class="motor-image" style="top: 2%; left: 8%;">
                 <img src="/images/MotorL.png" alt="Valve" class="motor-image" style="top: 7%; left: 8%;">
+                <img src="/images/MotorL.png" alt="Valve" class="motor-image" style="top: 95%; left: 40%;">
                 <img src="/images/MotorR.png" alt="Valve" class="motor-image" style="top: 2%; left: 90%;">
                 <img src="/images/MotorR.png" alt="Valve" class="motor-image" style="top: 7%; left: 90%;">
                 
@@ -577,55 +578,61 @@
         setInterval(updateActualValues, 10000);
 
         function start() {
-            // Lấy giá trị từ bảng "Công thức hiện tại"
-            const total_weight = parseFloat(document.getElementById('total_weight').value) || 0;
-            const batch_ref = parseFloat(document.getElementById('batch_number').value) || 0;
-            const cement = parseFloat(document.getElementById('current-cement').textContent) || 0;
-            const sand = parseFloat(document.getElementById('current-sand').textContent) || 0;
-            const mineral = parseFloat(document.getElementById('current-mineral').textContent) || 0;
-            const flyash = parseFloat(document.getElementById('current-flyash').textContent) || 0;
-            const additive1 = parseFloat(document.getElementById('current-additive1').textContent) || 0;
-            const additive2 = parseFloat(document.getElementById('current-additive2').textContent) || 0;
-            const additive3 = parseFloat(document.getElementById('current-additive3').textContent) || 0;
+            try {
+                // Lấy giá trị từ bảng "Công thức hiện tại"
+                const total_weight = parseFloat(document.getElementById('total_weight')?.value) || 0;
+                const batch_ref = parseFloat(document.getElementById('batch_number')?.value) || 0;
+                const cement_ref = parseFloat(document.getElementById('current-cement')?.textContent) || 0;
+                const sand_ref = parseFloat(document.getElementById('current-sand')?.textContent) || 0;
+                const mineral_ref = parseFloat(document.getElementById('current-mineral')?.textContent) || 0;
+                const flyash_ref = parseFloat(document.getElementById('current-flyash')?.textContent) || 0;
+                const additive1_ref = parseFloat(document.getElementById('current-additive1')?.textContent) || 0;
+                const additive2_ref = parseFloat(document.getElementById('current-additive2')?.textContent) || 0;
+                const additive3_ref = parseFloat(document.getElementById('current-additive3')?.textContent) || 0;
 
-            // Tạo danh sách các tag và giá trị cần ghi xuống PLC
-            const dataToWrite = [
-                { tag: 'Total_Weight', value: total_weight },
-                { tag: 'Batch_ref', value: batch_ref },
-                { tag: 'Cement_ref', value: cement },
-                { tag: 'Sand_ref', value: sand },
-                { tag: 'Mineral_ref', value: mineral },
-                { tag: 'Flyash_ref', value: flyash },
-                { tag: 'PG01_ref', value: additive1 },
-                { tag: 'PG02_ref', value: additive2 },
-                { tag: 'PG03_ref', value: additive3 },
-                { tag: 'Start', value: true }
-            ];
+                // Tạo danh sách các tag và giá trị cần ghi xuống PLC
+                const tags = [
+                    'Total_Weight', 'Batch_ref', 'Cement_ref', 'Sand_ref',
+                    'Mineral_ref', 'Flyash_ref', 'PG01_ref', 'PG02_ref', 
+                    'PG03_ref', 'Start', 'Stop'
+                ];
 
-            // Gửi toàn bộ dữ liệu xuống PLC thông qua API mới
-            fetch('/writemultipleplcdata', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ data: dataToWrite })
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Lỗi khi gửi dữ liệu xuống PLC!');
-                }
-                return response.json();
-            })
-            .then(data => {
-                logMessage("System started: " + data.message);
-                // Thay đổi trạng thái của nút "Start" và "Stop"
-                const stopButton = document.getElementById('stop-button');
-                stopButton.disabled = false;
-                const startButton = document.getElementById('start-button');
-                startButton.disabled = true;
-            })
-            .catch(err => {
-                console.error('Lỗi khi gửi dữ liệu xuống PLC:', err);
-                logMessage('Error starting system.', 1); // Log lỗi với màu đỏ
-            });
+                const values = [
+                    total_weight, batch_ref, cement_ref, sand_ref,
+                    mineral_ref, flyash_ref, additive1_ref, additive2_ref,
+                    additive3_ref, true, false
+                ];
+
+                // Gửi toàn bộ dữ liệu xuống PLC thông qua API
+                fetch('/writeplcdata', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ tag: tags, value: values }) // Sử dụng tag và value
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`API trả về lỗi: ${response.statusText}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    logMessage("System started successfully."); // Log thông báo thành công
+
+                    // Thay đổi trạng thái của nút "Start" và "Stop"
+                    const stopButton = document.getElementById('stop-button');
+                    stopButton.disabled = false;
+
+                    const startButton = document.getElementById('start-button');
+                    startButton.disabled = true;
+                })
+                .catch(err => {
+                    console.error('Error while writing data:', err);
+                    logMessage('Error starting the system. Please check the configuration!', 1); // Log lỗi
+                });
+            } catch (err) {
+                console.error('Unexpected error in start function:', err);
+                logMessage('Unexpected error occurred while starting the system.', 1); // Log lỗi không mong muốn
+            }
         }
 
         function stop() {
