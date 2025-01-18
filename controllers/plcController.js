@@ -14,10 +14,10 @@ exports.connectPLC = async (req, res) => {
 // API: Đọc dữ liệu từ PLC
 exports.readPLCData = async (req, res) => {
     try {
-        const data = await new Promise((resolve, reject) => {
-            plcModel.readPLCData(); // Đọc dữ liệu từ PLC
-            setTimeout(() => resolve(), 500); // Đợi PLC phản hồi
-        });
+        // Gọi hàm `readPLCData` và chờ dữ liệu từ PLC
+        const data = await plcModel.readPLCData();
+        
+        // Trả về dữ liệu đọc được cho client
         res.json({ message: 'Dữ liệu đọc được từ PLC:', data });
     } catch (error) {
         console.error('Lỗi khi đọc dữ liệu từ PLC:', error);

@@ -60,21 +60,23 @@ async function connectPLC() {
 
 // Đọc dữ liệu từ PLC
 function readPLCData() {
-    // Cấu hình ánh xạ biến
-    conn.setTranslationCB(function(tag) {
-        return variables_read[tag];
-    });
+    return new Promise((resolve, reject) => {
+        // Cấu hình ánh xạ biến
+        conn.setTranslationCB((tag) => variables_read[tag]);
 
-    // Thêm các biến vào danh sách cần đọc
-    conn.addItems(Object.keys(variables_read));
+        // Thêm các biến vào danh sách cần đọc
+        conn.addItems(Object.keys(variables_read));
 
-    // Đọc toàn bộ các giá trị
-    conn.readAllItems(function(anythingBad, values) {
-        if (anythingBad) {
-            console.log("SOMETHING WENT WRONG READING VALUES!!!!");
-        } else {
-            console.log("Dữ liệu đọc được từ PLC:", values);
-        }
+        // Đọc toàn bộ các giá trị
+        conn.readAllItems((error, values) => {
+            if (error) {
+                console.error("Lỗi khi đọc giá trị từ PLC:", error);
+                reject(error);
+            } else {
+                console.log("Dữ liệu đọc được từ PLC:", values);
+                resolve(values); // Trả về dữ liệu đọc được
+            }
+        });
     });
 }
 

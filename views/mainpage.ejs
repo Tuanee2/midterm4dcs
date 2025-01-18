@@ -548,34 +548,44 @@
                 sand: "Sand_Value",
                 mineral: "Mineral_Value",
                 flyash: "Flyash_Value",
-                additive1: "Additive1_Value",
-                additive2: "Additive2_Value",
-                additive3: "Additive3_Value"
+                additive1: "PG01_Value",
+                additive2: "PG02_Value",
+                additive3: "PG03_Value"
             };
 
-            // Lặp qua các tag để đọc giá trị
-            Object.keys(tags).forEach(key => {
-                fetch('/readPLCValueByTag', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ tag: tags[key] })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.value !== undefined) {
-                        // Cập nhật giá trị vào bảng "Giá trị thực tế"
-                        const cell = document.getElementById(`actual-${key}`);
-                        cell.textContent = parseFloat(data.value).toFixed(3);
-                    } else {
-                        console.error(`Lỗi khi đọc giá trị từ tag "${tags[key]}":`, data.error);
-                    }
-                })
-                .catch(err => console.error(`Lỗi khi gọi API cho tag "${tags[key]}":`, err));
+            // Tạo danh sách các tag để gửi lên server
+            const tagList = Object.values(tags);
+
+            // Gửi yêu cầu đọc dữ liệu của tất cả các tag
+            fetch('/readPLCData', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ tags: tagList })
+            })
+            .then(response => response.json())
+            .then(data => {
+                const cementValue = data.values?.Cement_Value || 0;
+                document.getElementById('actual-cement').textContent = parseFloat(cementValue).toFixed(3);
+                const sandValue = data.values?.Sand_Value || 0;
+                document.getElementById('actual-sand').textContent = parseFloat(sandValue).toFixed(3);
+                const mineralValue = data.values?.Mineral_Value || 0;
+                document.getElementById('actual-mineral').textContent = parseFloat(mineralValue).toFixed(3);
+                const flyashValue = data.values?.Flyash_Value || 0;
+                document.getElementById('actual-flyash').textContent = parseFloat(flyashValue).toFixed(3);
+                const additive1Value = data.values?.PG01_Value || 0;    
+                document.getElementById('actual-additive1').textContent = parseFloat(additive1Value).toFixed(3);
+                const additive2Value = data.values?.PG02_Value || 0;
+                document.getElementById('actual-additive2').textContent = parseFloat(additive2Value).toFixed(3);
+                const additive3Value = data.values?.PG03_Value || 0;
+                document.getElementById('actual-additive3').textContent = parseFloat(additive3Value).toFixed(3);
+            })
+            .catch(err => {
+                console.error('Lỗi khi gọi API đọc dữ liệu PLC:', err);
             });
         }
 
         // Gọi hàm mỗi giây để cập nhật bảng
-        setInterval(updateActualValues, 10000);
+        setInterval(updateActualValues, 5000);
 
         function start() {
             try {
