@@ -243,22 +243,22 @@
 
             // Danh sách các nút và tag PLC tương ứng
             const buttonTasks = [
-                { name: "Cement Screw", tag: "Cement_Screw" },
-                { name: "Fly Ash Screw", tag: "Flyash_Screw" },
-                { name: "Sand Screw", tag: "Sand_Screw" },
-                { name: "Mineral Screw", tag: "Mineral_Screw" },
-                { name: "Mixer", tag: "Mixer" },
-                { name: "Conveyor Chute", tag: "Conveyor_Chute" },
-                { name: "Hopper Valve PG 1", tag: "Hopper_PG1" },
-                { name: "Hopper Valve PG 2", tag: "Hopper_PG2" },
-                { name: "Hopper Valve PG 3", tag: "Hopper_PG3" },
-                { name: "PG Scale Valve", tag: "PG_Scale_Valve" },
-                { name: "Sand Scale Valve", tag: "Sand_Scale_Valve" },
-                { name: "Mineral Ash Valve", tag: "Mineral_Ash_Valve" },
-                { name: "Mixer Valve Open", tag: "Mixer_Valve_Open" },
-                { name: "Mixer Valve Close", tag: "Mixer_Valve_Close" },
-                { name: "Sand Valve Vibrator", tag: "Sand_Valve_Vibrator" },
-                { name: "PG Ash Valve Vibrator", tag: "PG_Ash_Valve_Vibrator" }
+                { name: "Cement Screw", tag: "Cement_Screw", id: "valve-8-status" },
+                { name: "Fly Ash Screw", tag: "Flyash_Screw", id: "valve-13-status" },
+                { name: "Sand Screw", tag: "Sand_Screw", id: "valve-9-status" },
+                { name: "Mineral Screw", tag: "Mineral_Screw", id: "valve-12-status" },
+                { name: "Mixer", tag: "Mixer", id: "valve-10-status" },
+                { name: "Conveyor Chute", tag: "Conveyor_Chute", id: "valve-11-status" },
+                { name: "Hopper Valve PG 1", tag: "Hopper_PG1", id: "valve-6-status" },
+                { name: "Hopper Valve PG 2", tag: "Hopper_PG2", id: "valve-5-status" },
+                { name: "Hopper Valve PG 3", tag: "Hopper_PG3", id: "valve-4-status" },
+                { name: "PG Scale Valve", tag: "PG_Scale_Valve", id: "valve-3-status" },
+                { name: "Sand Scale Valve", tag: "Sand_Scale_Valve", id: "valve-1-status" },
+                { name: "Mineral Ash Valve", tag: "Mineral_Ash_Valve", id: "valve-2-status" },
+                { name: "Mixer Valve Open", tag: "Mixer_Valve_Open", id: "valve-7-status" }
+                //{ name: "Mixer Valve Close", tag: "Mixer_Valve_Close", id: "valve-8-status" },
+                //{ name: "Sand Valve Vibrator", tag: "Sand_Valve_Vibrator" },
+                //{ name: "PG Ash Valve Vibrator", tag: "PG_Ash_Valve_Vibrator" }
             ];
 
             // Tạo HTML cho các nút
@@ -268,7 +268,7 @@
                         <button 
                             class="manual-btn on" 
                             data-tag="${task.tag}" 
-                            onclick="handleManualButtonClick('${task.tag}', this)">
+                            onclick="handleManualButtonClick('${task.tag}', this, '${task.id}')">
                             ${task.name}
                         </button>
                     `).join("")}
@@ -276,21 +276,29 @@
             `;
         }
 
-        function handleManualButtonClick(tag, button) {
+        function handleManualButtonClick(tag, button, id) {
             // Kiểm tra trạng thái hiện tại của nút
             const isOn = button.classList.contains('on'); // Kiểm tra xem nút có lớp 'on' hay không 
-
+            const color = document.getElementById(id);
+            if (!color) {
+                console.error(`Element with ID "${id}" not found.`);
+                return;
+            }
+            
             // Cập nhật giao diện nút
             if (isOn) {
                 writeplcdata(tag, true);
+                // Cập nhật trạng thái của nút
+                color.style.backgroundColor = '#4dbf5f';
                 button.classList.remove('on');
                 button.classList.add('off');
-                logMessage(`${tag} turned OFF.`);
+                logMessage(`${tag} turned ON.`);
             } else {
                 writeplcdata(tag, false);
+                color.style.backgroundColor = "red";
                 button.classList.remove('off');
                 button.classList.add('on');
-                logMessage(`${tag} turned ON.`);
+                logMessage(`${tag} turned OFF.`);
             }
         }
 
@@ -381,7 +389,7 @@
                                 <input type="number" id="additive3" value="${recipe.additive3}" min="0" required>
                             </div>
                             <div class"manual-grid">
-                                <button type="button" onclick="saveRecipe(${recipe.recipe-name})">Update</button>
+                                <!-- <button type="button" onclick="saveRecipe(${recipe.recipe-name})">Update</button> -->
                                 <button type="button" onclick="deleteRecipeConfirmation('${recipe.name}')">Delete</button>
                                 <button type="button" onclick="showRecipeList()">Back</button>
                                 <button type="button" onclick="applyRecipe()">Apply</button>
@@ -601,7 +609,7 @@
         }
 
         // Gọi hàm mỗi giây để cập nhật bảng
-        setInterval(updateActualValues, 5000);
+        setInterval(updateActualValues, 100000);
 
         function start() {
             try {
@@ -671,6 +679,8 @@
 
         function reset() {
             // Thực hiện các thao tác reset hệ thống ở đây
+            logMessage("System reset.");
+            writeplcdata(["Reset","Stop","Start","Auto","Manual"],[true,false,false,false,false]);
             logMessage("System reset.");
         }
 
